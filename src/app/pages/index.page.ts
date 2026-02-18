@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { MessageService } from '../services/message.service';
-
+import AuthComponent from '../components/auth.component';
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [AuthComponent],
   template: `
      {{ message }}
+      <app-auth></app-auth>
   `,
 })
 export default class Home {
