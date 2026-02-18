@@ -1,23 +1,22 @@
+import { auth } from "src/server/utils/auth";
 import { prisma } from "../src/lib/prisma";
-import bcrypt from 'bcryptjs'
 
 
 async function main() {
-  const user = await prisma.user.upsert({
-    where: { email: 'admin@example.com' },
-    update: {},
-    create: {
-      email: 'admin@example.com',
-      name: 'Admin User',
+  const result = await auth.api.signUpEmail({
+    body: {
+      email: "admin@example.com",
+      password: "admin123",
+      name: "Site Admin",
     },
   });
 
-  console.log({ user });
+  console.log("Admin seeded successfully:", result.user.email);
 
   const message = await prisma.message.create({
     data: {
       body: 'Hello, world!',
-      userId: user.id,
+      userId: result.user.id,
     },
   });
 
