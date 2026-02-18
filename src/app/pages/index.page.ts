@@ -6,7 +6,9 @@ import AuthComponent from '../components/auth.component';
   imports: [AuthComponent],
   template: `
      {{ message }}
-      <app-auth></app-auth>
+      <div>
+        <app-auth></app-auth>
+      </div>
   `,
 })
 export default class Home {
