@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,137 +23,141 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatCheckboxModule
   ],
+  styleUrls: ['./signup.page.css', '../../styles.css'],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <mat-card class="w-full max-w-md shadow-2xl">
-        <mat-card-header class="text-center pb-6">
-          <div class="w-full">
-            <mat-card-title class="text-3xl font-bold text-gray-800 mb-2">
+    <div class="signup-page__container">
+      <mat-card class="signup-page__card">
+        <mat-card-header class="signup-page__header">
+          <div class="signup-page__header-wrapper">
+            <mat-card-title class="signup-page__title">
               Create Account
             </mat-card-title>
-            <mat-card-subtitle class="text-gray-600 text-base">
+            <mat-card-subtitle class="signup-page__subtitle">
               Join us today and get started
             </mat-card-subtitle>
           </div>
         </mat-card-header>
         
-        <mat-card-content class="px-6 pb-6">
-          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <mat-card-content class="signup-page__content">
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-page__form">
             <!-- Name Fields Row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <mat-form-field appearance="outline" class="w-full">
+            <div class="signup-page__name-fields">
+              <mat-form-field appearance="outline" class="signup-page__field-group">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstName" required 
-                       class="text-sm">
-                <mat-icon matSuffix class="text-gray-400">person</mat-icon>
-                <mat-error *ngIf="signupForm.get('firstName')?.hasError('required')">
-                  First name is required
-                </mat-error>
+                       class="signup-page__input">
+                <mat-icon matSuffix class="signup-page__icon">person</mat-icon>
+                @if (signupForm.get('firstName')?.hasError('required')) {
+                  <mat-error>First name is required</mat-error>
+                }
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="w-full">
+              <mat-form-field appearance="outline" class="signup-page__field-group">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastName" required 
-                       class="text-sm">
-                <mat-error *ngIf="signupForm.get('lastName')?.hasError('required')">
-                  Last name is required
-                </mat-error>
+                       class="signup-page__input">
+                @if (signupForm.get('lastName')?.hasError('required')) {
+                  <mat-error>Last name is required</mat-error>
+                }
               </mat-form-field>
             </div>
 
-            <mat-form-field appearance="outline" class="w-full">
+            <mat-form-field appearance="outline" class="signup-page__field-group">
               <mat-label>Email Address</mat-label>
               <input matInput type="email" formControlName="email" required 
-                     class="text-sm" placeholder="you@example.com">
-              <mat-icon matSuffix class="text-gray-400">email</mat-icon>
-              <mat-error *ngIf="signupForm.get('email')?.hasError('required')">
-                Email is required
-              </mat-error>
-              <mat-error *ngIf="signupForm.get('email')?.hasError('email')">
-                Please enter a valid email address
-              </mat-error>
+                     class="signup-page__input" placeholder="you@example.com">
+              <mat-icon matSuffix class="signup-page__icon">email</mat-icon>
+              @if (signupForm.get('email')?.hasError('required')) {
+                <mat-error>Email is required</mat-error>
+              }
+              @if (signupForm.get('email')?.hasError('email')) {
+                <mat-error>Please enter a valid email address</mat-error>
+              }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="w-full">
+            <mat-form-field appearance="outline" class="signup-page__field-group">
               <mat-label>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'" 
-                     formControlName="password" required class="text-sm">
+                     formControlName="password" required class="signup-page__input">
               <button mat-icon-button matSuffix 
                       (click)="hidePassword = !hidePassword" 
                       type="button"
-                      class="text-gray-400 hover:text-gray-600">
+                      class="signup-page__icon signup-page__icon--hover">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
-              <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
-                Password is required
-              </mat-error>
-              <mat-error *ngIf="signupForm.get('password')?.hasError('minlength')">
-                Password must be at least 8 characters
-              </mat-error>
-              <mat-error *ngIf="signupForm.get('password')?.hasError('pattern')">
-                Password must contain uppercase, lowercase, number and special character
-              </mat-error>
+              @if (signupForm.get('password')?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+              }
+              @if (signupForm.get('password')?.hasError('minlength')) {
+                <mat-error>Password must be at least 8 characters</mat-error>
+              }
+              @if (signupForm.get('password')?.hasError('pattern')) {
+                <mat-error>Password must contain uppercase, lowercase, number and special character</mat-error>
+              }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="w-full">
+            <mat-form-field appearance="outline" class="signup-page__field-group">
               <mat-label>Confirm Password</mat-label>
               <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" 
-                     formControlName="confirmPassword" required class="text-sm">
+                     formControlName="confirmPassword" required class="signup-page__input">
               <button mat-icon-button matSuffix 
                       (click)="hideConfirmPassword = !hideConfirmPassword" 
                       type="button"
-                      class="text-gray-400 hover:text-gray-600">
+                      class="signup-page__icon signup-page__icon--hover">
                 <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
-              <mat-error *ngIf="signupForm.get('confirmPassword')?.hasError('required')">
-                Please confirm your password
-              </mat-error>
-              <mat-error *ngIf="signupForm.hasError('passwordMismatch') && !signupForm.get('confirmPassword')?.hasError('required')">
-                Passwords do not match
-              </mat-error>
+              @if (signupForm.get('confirmPassword')?.hasError('required')) {
+                <mat-error>Please confirm your password</mat-error>
+              }
+              @if (signupForm.hasError('passwordMismatch') && !signupForm.get('confirmPassword')?.hasError('required')) {
+                <mat-error>Passwords do not match</mat-error>
+              }
             </mat-form-field>
 
             <!-- Terms and Conditions -->
-            <div class="flex items-start space-x-2 py-2">
+            <div class="signup-page__terms">
               <mat-checkbox formControlName="acceptTerms" 
-                           class="mt-1"
+                           class="signup-page__terms-checkbox"
                            color="primary">
               </mat-checkbox>
-              <label class="text-sm text-gray-600 leading-relaxed">
+              <label class="signup-page__terms-label">
                 I agree to the 
-                <a href="#" class="text-blue-600 hover:text-blue-800 underline">Terms of Service</a> 
+                <a href="#" class="signup-page__terms-link">Terms of Service</a> 
                 and 
-                <a href="#" class="text-blue-600 hover:text-blue-800 underline">Privacy Policy</a>
+                <a href="#" class="signup-page__terms-link">Privacy Policy</a>
               </label>
             </div>
-            <mat-error *ngIf="signupForm.get('acceptTerms')?.hasError('required')" 
-                       class="text-red-500 text-xs mt-1">
-              You must accept the terms and conditions
-            </mat-error>
+            @if (signupForm.get('acceptTerms')?.hasError('required')) {
+              <mat-error class="signup-page__error">
+                You must accept the terms and conditions
+              </mat-error>
+            }
 
             <!-- Submit Button -->
-            <!-- [disabled]="signupForm.invalid || isLoading" -->
             <button mat-raised-button color="primary" type="submit" 
-                    class="w-full h-12 text-base font-semibold mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
-              <mat-icon *ngIf="isLoading" class="animate-spin mr-2">refresh</mat-icon>
+                    [disabled]="signupForm.invalid || isLoading"
+                    class="signup-page__submit-btn">
+              @if (isLoading) {
+                <mat-icon class="signup-page__loading-icon">refresh</mat-icon>
+              }
               {{ isLoading ? 'Creating Account...' : 'Create Account' }}
             </button>
           </form>
         </mat-card-content>
 
-        <mat-card-actions class="px-6 pb-6 pt-0">
-          <div class="text-center w-full">
-            <div class="flex items-center justify-center space-x-4 mb-4">
-              <div class="flex-1 h-px bg-gray-300"></div>
-              <span class="text-gray-500 text-sm">or</span>
-              <div class="flex-1 h-px bg-gray-300"></div>
+        <mat-card-actions class="signup-page__actions">
+          <div class="signup-page__actions-wrapper">
+            <div class="signup-page__divider">
+              <div class="signup-page__divider-line"></div>
+              <span class="signup-page__divider-text">or</span>
+              <div class="signup-page__divider-line"></div>
             </div>
             
             <!-- Social Login Buttons -->
-            <div class="grid grid-cols-2 gap-3 mb-6">
-              <button mat-stroked-button class="h-10 text-sm border-gray-300 hover:bg-gray-50">
-                <mat-icon class="mr-2">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <div class="signup-page__social-buttons">
+              <button mat-stroked-button class="signup-page__social-btn">
+                <mat-icon class="signup-page__social-icon">
+                  <svg class="signup-page__social-icon--google" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -162,16 +166,16 @@ import { CommonModule } from '@angular/common';
                 </mat-icon>
                 Google
               </button>
-              <button mat-stroked-button class="h-10 text-sm border-gray-300 hover:bg-gray-50">
-                <mat-icon class="mr-2">facebook</mat-icon>
+              <button mat-stroked-button class="signup-page__social-btn">
+                <mat-icon class="signup-page__social-icon">facebook</mat-icon>
                 Facebook
               </button>
             </div>
 
-            <p class="text-sm text-gray-600">
+            <p class="signup-page__login-text">
               Already have an account? 
               <a routerLink="/login" 
-                 class="text-blue-600 hover:text-blue-800 font-semibold underline transition-colors duration-200">
+                 class="signup-page__login-link">
                 Sign in here
               </a>
             </p>
@@ -180,11 +184,9 @@ import { CommonModule } from '@angular/common';
       </mat-card>
     </div>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `]
+  host: {
+    'class': 'signup-page'
+  }
 })
 export default class SignupPageComponent {
   signupForm: FormGroup;
@@ -207,14 +209,16 @@ export default class SignupPageComponent {
       ]],
       confirmPassword: ['', [Validators.required]],
       acceptTerms: [false, [Validators.requiredTrue]]
-    }, { validators: this.passwordMatchValidator });
+    }, 
+    { validators: this.passwordMatchValidator });
   }
 
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password');
-    const confirmPassword = form.get('confirmPassword');
-    
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const form = control as FormGroup;       // cast if you need Group API
+    const pw = form.get('password');
+    const cp = form.get('confirmPassword');
+
+    if (pw && cp && pw.value !== cp.value) {
       return { passwordMismatch: true };
     }
     return null;
