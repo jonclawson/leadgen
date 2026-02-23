@@ -1,24 +1,18 @@
-/* BEM styles for signup page component using Tailwind @apply */
-/* @reference "../../styles.css"; */
-/* Add this import at the top */
-/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); */
+
 @import "tailwindcss";
 
-/* Block: signup-page */
 .signup-page {
-  /* @apply block min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4; */
+  @apply block min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4;
 }
 
 .signup-page__container {
   @apply flex;
 }
 
-/* Element: card */
 .signup-page__card {
   @apply w-full max-w-md shadow-2xl;
 }
 
-/* Element: header */
 .signup-page__header {
   @apply text-center pb-6;
 }
@@ -27,27 +21,22 @@
   @apply w-full;  
 }
 
-/* Element: title */
 .signup-page__title {
   @apply text-3xl font-bold text-gray-800 mb-2;
 }
 
-/* Element: subtitle */
 .signup-page__subtitle {
   @apply text-gray-600 text-base;
 }
 
-/* Element: content */
 .signup-page__content {
   @apply px-6 pb-6;
 }
 
-/* Element: form */
 .signup-page__form {
   @apply flex flex-col gap-4;
 }
 
-/* Element: name fields */
 .signup-page__name-fields {
   @apply grid grid-cols-1 gap-4;
 }
@@ -58,17 +47,14 @@
   }
 }
 
-/* Element: field group */
 .signup-page__field-group {
   @apply w-full;
 }
 
-/* Element: input */
 .signup-page__input {
   @apply text-sm;
 }
 
-/* Element: icon */
 .signup-page__icon {
   @apply text-gray-400;
 }
@@ -77,7 +63,6 @@
   @apply text-gray-600;
 }
 
-/* Element: terms */
 .signup-page__terms {
   @apply flex items-start gap-2 py-2;
 }
@@ -94,22 +79,18 @@
   @apply text-blue-600 underline hover:text-blue-800;
 }
 
-/* Element: error */
 .signup-page__error {
   @apply text-red-500 text-xs mt-1;
 }
 
-/* Element: submit button */
 .signup-page__submit-btn {
   @apply w-full h-12 text-base font-semibold mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200;
 }
 
-/* Element: loading icon */
 .signup-page__loading-icon {
   @apply mr-2 animate-spin;
 }
 
-/* Element: actions */
 .signup-page__actions {
   @apply px-6 pb-6 pt-0;
 }
@@ -118,7 +99,6 @@
   @apply text-center w-full;
 }
 
-/* Element: divider */
 .signup-page__divider {
   @apply flex items-center justify-center gap-4 mb-4;
 }
@@ -131,7 +111,6 @@
   @apply text-gray-500 text-sm;
 }
 
-/* Element: social buttons */
 .signup-page__social-buttons {
   @apply grid grid-cols-2 gap-3 mb-6;
 }
@@ -148,7 +127,6 @@
   @apply w-5 h-5;
 }
 
-/* Element: login link */
 .signup-page__login-text {
   @apply text-sm text-gray-600;
 }

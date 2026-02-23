@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
+import { authClient } from '../../lib/auth-client';
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +24,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatCheckboxModule
   ],
-  styleUrls: ['./signup.page.css', '../../styles.css'],
+  styleUrls: ['./signup.page.css'],
   template: `
     <div class="signup-page__container">
       <mat-card class="signup-page__card">
@@ -42,7 +43,7 @@ import { CommonModule } from '@angular/common';
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-page__form">
             <!-- Name Fields Row -->
             <div class="signup-page__name-fields">
-              <mat-form-field appearance="outline" class="signup-page__field-group">
+              <mat-form-field  class="signup-page__field-group">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstName" required 
                        class="signup-page__input">
@@ -52,7 +53,7 @@ import { CommonModule } from '@angular/common';
                 }
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="signup-page__field-group">
+              <mat-form-field  class="signup-page__field-group">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastName" required 
                        class="signup-page__input">
@@ -62,7 +63,7 @@ import { CommonModule } from '@angular/common';
               </mat-form-field>
             </div>
 
-            <mat-form-field appearance="outline" class="signup-page__field-group">
+            <mat-form-field  class="signup-page__field-group">
               <mat-label>Email Address</mat-label>
               <input matInput type="email" formControlName="email" required 
                      class="signup-page__input" placeholder="you@example.com">
@@ -75,7 +76,7 @@ import { CommonModule } from '@angular/common';
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="signup-page__field-group">
+            <mat-form-field  class="signup-page__field-group">
               <mat-label>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'" 
                      formControlName="password" required class="signup-page__input">
@@ -96,7 +97,7 @@ import { CommonModule } from '@angular/common';
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="signup-page__field-group">
+            <mat-form-field  class="signup-page__field-group">
               <mat-label>Confirm Password</mat-label>
               <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" 
                      formControlName="confirmPassword" required class="signup-page__input">
@@ -232,12 +233,12 @@ export default class SignupPageComponent {
         const formData = this.signupForm.value;
         console.log('Signup form data:', formData);
         
-        // TODO: Implement actual signup logic here
-        // Example: await this.authService.signup(formData)
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
+        const { data, error } = await authClient.signUp.email({
+            email: formData.email,
+            password: formData.password,
+            name: `${formData.firstName} ${formData.lastName}`,
+        });
+
         // Navigate to success page or login
         this.router.navigate(['/login'], { 
           queryParams: { message: 'Account created successfully! Please sign in.' }
