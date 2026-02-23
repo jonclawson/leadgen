@@ -1,136 +1,136 @@
 
 @import "tailwindcss";
 
-.signup-page {
+.signup {
   @apply block min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4;
 }
 
-.signup-page__container {
+.signup__container {
   @apply flex;
 }
 
-.signup-page__card {
+.signup__card {
   @apply w-full max-w-md shadow-2xl;
 }
 
-.signup-page__header {
+.signup__header {
   @apply text-center pb-6;
 }
 
-.signup-page__header-wrapper {
+.signup__header-wrapper {
   @apply w-full;  
 }
 
-.signup-page__title {
+.signup__title {
   @apply text-3xl font-bold text-gray-800 mb-2;
 }
 
-.signup-page__subtitle {
+.signup__subtitle {
   @apply text-gray-600 text-base;
 }
 
-.signup-page__content {
+.signup__content {
   @apply px-6 pb-6;
 }
 
-.signup-page__form {
+.signup__form {
   @apply flex flex-col gap-4;
 }
 
-.signup-page__name-fields {
+.signup__name-fields {
   @apply grid grid-cols-1 gap-4;
 }
 
 @media (min-width: 768px) {
-  .signup-page__name-fields {
+  .signup__name-fields {
     @apply grid-cols-2;
   }
 }
 
-.signup-page__field-group {
+.signup__field-group {
   @apply w-full;
 }
 
-.signup-page__input {
+.signup__input {
   @apply text-sm;
 }
 
-.signup-page__icon {
+.signup__icon {
   @apply text-gray-400;
 }
 
-.signup-page__icon--hover:hover {
+.signup__icon--hover:hover {
   @apply text-gray-600;
 }
 
-.signup-page__terms {
+.signup__terms {
   @apply flex items-start gap-2 py-2;
 }
 
-.signup-page__terms-checkbox {
+.signup__terms-checkbox {
   @apply mt-1;
 }
 
-.signup-page__terms-label {
+.signup__terms-label {
   @apply text-sm text-gray-600 leading-relaxed;
 }
 
-.signup-page__terms-link {
+.signup__terms-link {
   @apply text-blue-600 underline hover:text-blue-800;
 }
 
-.signup-page__error {
+.signup__error {
   @apply text-red-500 text-xs mt-1;
 }
 
-.signup-page__submit-btn {
+.signup__submit-btn {
   /* @apply w-full text-white h-12 text-base font-semibold mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200; */
 }
 
-.signup-page__loading-icon {
+.signup__loading-icon {
   @apply mr-2 animate-spin;
 }
 
-.signup-page__actions {
+.signup__actions {
   @apply px-6 pb-6 pt-0;
 }
 
-.signup-page__actions-wrapper {
+.signup__actions-wrapper {
   @apply text-center w-full;
 }
 
-.signup-page__divider {
+.signup__divider {
   @apply flex items-center justify-center gap-4 mb-4;
 }
 
-.signup-page__divider-line {
+.signup__divider-line {
   @apply flex-1 h-px bg-gray-300;
 }
 
-.signup-page__divider-text {
+.signup__divider-text {
   @apply text-gray-500 text-sm;
 }
 
-.signup-page__social-buttons {
+.signup__social-buttons {
   @apply grid grid-cols-2 gap-3 mb-6;
 }
 
-.signup-page__social-btn {
+.signup__social-btn {
   @apply h-10 text-sm border-gray-300 hover:bg-gray-50;
 }
 
-.signup-page__social-icon {
+.signup__social-icon {
   @apply mr-2;
 }
 
-.signup-page__social-icon--google {
+.signup__social-icon--google {
   @apply w-5 h-5;
 }
 
-.signup-page__login-text {
+.signup__login-text {
   @apply text-sm text-gray-600;
 }
 
-.signup-page__login-link {
+.signup__login-link {
   @apply text-blue-600 font-semibold underline hover:text-blue-800 transition-colors duration-200;
 }
