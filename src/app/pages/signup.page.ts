@@ -79,7 +79,8 @@ import { authClient } from '../../lib/auth-client';
             <mat-form-field  class="signup-page__field-group">
               <mat-label>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'" 
-                     formControlName="password" required class="signup-page__input">
+                     formControlName="password" required class="signup-page__input" 
+                     autocomplete="new-password">
               <button mat-icon-button matSuffix 
                       (click)="hidePassword = !hidePassword" 
                       type="button"
@@ -100,7 +101,8 @@ import { authClient } from '../../lib/auth-client';
             <mat-form-field  class="signup-page__field-group">
               <mat-label>Confirm Password</mat-label>
               <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" 
-                     formControlName="confirmPassword" required class="signup-page__input">
+                     formControlName="confirmPassword" required class="signup-page__input" 
+                     autocomplete="new-password">
               <button mat-icon-button matSuffix 
                       (click)="hideConfirmPassword = !hideConfirmPassword" 
                       type="button"

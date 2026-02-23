@@ -84,7 +84,7 @@
 }
 
 .signup-page__submit-btn {
-  @apply w-full h-12 text-base font-semibold mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200;
+  /* @apply w-full text-white h-12 text-base font-semibold mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200; */
 }
 
 .signup-page__loading-icon {
