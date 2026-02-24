@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { PLATFORM_ID, inject, Component } from '@angular/core';
 import SignupComponent from '../components/signup.component';
 
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -15,5 +16,11 @@ import SignupComponent from '../components/signup.component';
   }
 })
 export default class SignupPageComponent {
-  
+  private platformId = inject(PLATFORM_ID);
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      // Safe to use window, document, or localStorage here
+      console.log('Client Side:', window.location.href);
+    }
+  }
 }

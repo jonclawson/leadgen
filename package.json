@@ -12,7 +12,7 @@
     "build": "vite build",
     "watch": "vite build --watch",
     "test": "vitest",
-    "preview": "node dist/analog/server/index.mjs",
+    "preview": "node -r dotenv/config dist/analog/server/index.mjs",
     "seed": "tsx prisma/seed.ts"
   },
   "private": true,

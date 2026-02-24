@@ -13,7 +13,25 @@ export default defineConfig(({ mode }) => ({
     mainFields: ['module'],
   },
   plugins: [
-    analog(),
+    analog({
+      ssr: true,
+      prerender: {
+        routes: async () => {
+          return [];
+        },
+      },
+      nitro: {
+        // prerender: {
+        //   ignore: ['/api/**']
+        // },
+        preset: 'node-server',
+        routeRules: {
+          // All admin URLs are only rendered on the client
+          '/index': { ssr: false },
+          '/signup': { ssr: false },
+        },
+      },
+    }),
     tailwindcss()
   ],
   test: {
