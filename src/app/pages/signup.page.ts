@@ -4,7 +4,6 @@ import SignupComponent from '../components/signup.component';
 import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-signup',
-  standalone: true,
   imports: [
    SignupComponent
   ],

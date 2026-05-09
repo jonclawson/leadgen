@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { authClient } from '../../lib/auth-client';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
   template: `
-    <button (click)="signIn()">Sign In</button>
-    <button (click)="signUp()">Sign Up</button>
+    <button routerLink="/signin">Sign In</button>
+    <button routerLink="/signup">Sign Up</button>
   `,
+  imports: [
+        RouterModule,
+  ]
 })
 export default class AuthComponent {
   async signIn() {

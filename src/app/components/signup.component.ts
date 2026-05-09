@@ -12,7 +12,6 @@ import { authClient } from '../../lib/auth-client';
 
 @Component({
   selector: 'signup',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -79,7 +78,8 @@ import { authClient } from '../../lib/auth-client';
             <mat-form-field  class="signup__field-group">
               <mat-label>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'" 
-                     formControlName="password" required class="signup__input" 
+                     formControlName="password" 
+                     required class="signup__input" 
                      autocomplete="new-password">
               <button mat-icon-button matSuffix 
                       (click)="hidePassword = !hidePassword" 
