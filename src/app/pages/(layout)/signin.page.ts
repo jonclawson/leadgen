@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import SigninComponent from "../components/signin.component";
+import SigninComponent from "../../components/signin.component";
 
 @Component({
   selector: 'signin-page',

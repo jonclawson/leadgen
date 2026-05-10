@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { authClient } from "../../lib/auth-client";
+import { authClient } from "../../../lib/auth-client";
 
 @Component({
   selector: 'signout-page',

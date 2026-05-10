@@ -33,7 +33,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -90,4 +89,19 @@ input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 1000px var(--mat-form-field-filled-container-color, var(--mat-sys-surface-variant)) inset !important;
     -webkit-text-fill-color: #333 !important;
     transition: background-color 5000s ease-in-out 0s;
+}
+
+@utility section-outer {
+   display: block;
+   width: 100%;
+   @apply odd:bg-gray-100/50;
+}
+
+@utility section {
+  @apply max-w-7xl mx-auto px-8 sm:px-12 lg:px-14;
+  /* @apply mx-auto max-w-2xl lg:max-w-7xl; */
+}
+
+@utility section-inner {
+  @apply py-4;
 }

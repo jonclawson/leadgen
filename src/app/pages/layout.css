@@ -1,0 +1,28 @@
+@reference "../../styles.css";
+
+.site-header {
+  background-color: aliceblue;
+  @apply section px-4 py-2 flex items-center justify-between;
+}
+
+.site-header__title {
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex flex-start;
+}
+
+.site-header__auth {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.site-main {
+  @apply section px-4 py-8; 
+  text-align: center;
+}
+
+.site-footer {
+  text-align: center;
+  background-color: aliceblue;
+  @apply section px-4 py-2;
+}

@@ -1,5 +1,5 @@
 import { PLATFORM_ID, inject, Component } from '@angular/core';
-import SignupComponent from '../components/signup.component';
+import SignupComponent from '../../components/signup.component';
 
 import { isPlatformBrowser } from '@angular/common';
 @Component({
