@@ -242,7 +242,7 @@ export default class SignupComponent {
         });
 
         // Navigate to success page or login
-        this.router.navigate(['/login'], { 
+        this.router.navigate(['/signin'], { 
           queryParams: { message: 'Account created successfully! Please sign in.' }
         });
         

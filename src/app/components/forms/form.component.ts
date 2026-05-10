@@ -42,7 +42,7 @@ export type FormField = EmailField | PasswordField | ButtonField;
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TextFieldComponent, PasswordFieldComponent, SubmitButtonComponent],
   template: `
-    <form [formGroup]="formGroup()" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formGroup()" (ngSubmit)="onSubmit($event)">
       @for (field of model(); track field.key) {
         @if (field.type === 'email') {
           <app-text-field
@@ -80,7 +80,6 @@ export default class FormComponent implements OnInit {
   @Output() readonly submit = new EventEmitter<Record<string, unknown>>();
 
   readonly formGroup = signal(this.fb.group({}));
-
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -99,7 +98,9 @@ export default class FormComponent implements OnInit {
     return this.fb.group(controls);
   }
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
     if (this.formGroup().valid) {
       this.submit.emit(this.formGroup().value);
     } else {

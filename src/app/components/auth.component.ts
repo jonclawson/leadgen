@@ -1,18 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { authClient } from '../../lib/auth-client';
 import { RouterModule } from '@angular/router';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   template: `
-    <button routerLink="/signin">Sign In</button>
-    <button routerLink="/signup">Sign Up</button>
+    @if (!user()) {
+      <button routerLink="/signin">Sign In</button>
+      <button routerLink="/signup">Sign Up</button>
+    } @else {
+      Welcome {{ user()?.name }}!
+      <button routerLink="/signout">Sign out</button>
+    }
   `,
   imports: [
         RouterModule,
+        JsonPipe,
   ]
 })
-export default class AuthComponent {
+export default class AuthComponent implements OnInit {
+  public user = signal<any | null>(null);
+
+  async ngOnInit() {
+    await this.getSession();
+  }
+
+  async getSession() {
+    const session = await authClient.getSession();
+    this.user.set(session.data?.user ?? null);
+    console.log('Current session:',  this.user());
+  }
+
   async signIn() {
     const { data, error } = await authClient.signIn.email({
       email: "admin@example.com",
@@ -24,6 +43,7 @@ export default class AuthComponent {
       return;
     }
     // Handle successful login
+    console.log("Login successful:", data);
   }
 
   async signUp() {
@@ -41,4 +61,13 @@ export default class AuthComponent {
     console.log("Sign up successful:", data);
   }
 
+  async signOut() {
+    const { error } = await authClient.signOut();
+    if (error) {
+      console.error(error.message);
+      return;
+    }
+    // Handle successful sign out
+    console.log("Signed out successfully");
+  }
 }

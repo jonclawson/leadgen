@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { authClient } from '../../lib/auth-client';
@@ -16,7 +16,23 @@ import FormComponent, { FormField } from './forms/form.component';
     </div>
   `,
 })
-export default class SigninComponent {
+export default class SigninComponent implements OnInit {
+  public user = signal<any | null>(null);
+
+  async ngOnInit() {
+    await this.getSession();
+    if (this.user()) {
+      // Redirect to dashboard if already signed in
+      window.location.href = '/';
+    }
+  }
+
+  async getSession() {
+    const session = await authClient.getSession();
+    this.user.set(session.data?.user ?? null);
+    console.log('Current session:',  this.user());
+  }
+    
   readonly signInModel: FormField[] = [
     {
       type: 'email',
@@ -57,5 +73,7 @@ export default class SigninComponent {
     }
 
     console.log('Signed in successfully', data);
+    // Redirect to dashboard or home page after successful sign in
+    window.location.href = '/';
   }
 }
