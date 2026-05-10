@@ -177,7 +177,7 @@ import { authClient } from '../../lib/auth-client';
 
             <p class="signup__login-text">
               Already have an account? 
-              <a routerLink="/login" 
+              <a routerLink="/signin" 
                  class="signup__login-link">
                 Sign in here
               </a>
