@@ -73,7 +73,7 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let form">
-                <button mat-icon-button [routerLink]="['/forms', form.id, 'view']" matTooltip="View">
+                <button mat-icon-button [routerLink]="['/forms', form.id]" matTooltip="View">
                   <mat-icon>visibility</mat-icon>
                 </button>
                 <button mat-icon-button [routerLink]="['/forms', form.id, 'edit']" matTooltip="Edit">
