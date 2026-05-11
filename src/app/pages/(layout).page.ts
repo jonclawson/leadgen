@@ -1,15 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import AuthComponent from '../components/auth.component';
+import { authClient } from '../../lib/auth-client';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, AuthComponent],
+  imports: [CommonModule, RouterModule, AuthComponent, MatButtonModule, MatIconModule],
   styleUrls: ['./layout.css'],
   template: `
     <header class="site-header">
       <div class="site-header__title">My App</div>
+      <nav class="site-nav">
+        @if (user()) {
+          <a routerLink="/forms" routerLinkActive="active" mat-button>
+            <mat-icon>description</mat-icon>
+            Forms
+          </a>
+        }
+      </nav>
       <div class="site-header__auth">
         <app-auth></app-auth>
       </div>
@@ -24,4 +35,15 @@ import AuthComponent from '../components/auth.component';
     </footer>
   `,
 })
-export default class AppLayout {}
+export default class AppLayout implements OnInit {
+  user = signal<any | null>(null);
+
+  async ngOnInit() {
+    await this.getSession();
+  }
+
+  async getSession() {
+    const session = await authClient.getSession();
+    this.user.set(session.data?.user ?? null);
+  }
+}

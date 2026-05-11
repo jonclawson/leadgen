@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String        @id @default(cuid())
+  email         String        @unique
   name          String?
   messages      Message[]
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean       @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   sessions      Session[]
   accounts      Account[]
+  dynamicForms  DynamicForm[]
 
   @@map("user")
 }
@@ -78,4 +79,38 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model DynamicForm {
+  id          String                @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fields      FormFieldDefinition[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@index([userId])
+  @@map("dynamic_form")
+}
+
+model FormFieldDefinition {
+  id            String      @id @default(cuid())
+  dynamicFormId String
+  dynamicForm   DynamicForm @relation(fields: [dynamicFormId], references: [id], onDelete: Cascade)
+  type          String      // 'email' | 'password' | 'button'
+  key           String
+  label         String?
+  icon          String?
+  placeholder   String?
+  validators    String?     // CSV string like "required,email,minLength:8"
+  buttonLabel   String?
+  buttonColor   String?     // 'primary' | 'accent' | 'warn'
+  order         Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([dynamicFormId])
+  @@map("form_field_definition")
 }

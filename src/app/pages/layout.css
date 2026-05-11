@@ -11,6 +11,14 @@
   display: flex flex-start;
 }
 
+.site-nav {
+  @apply flex gap-2 items-center;
+}
+
+.site-nav a {
+  @apply flex items-center gap-1;
+}
+
 .site-header__auth {
   display: flex;
   justify-content: flex-end;

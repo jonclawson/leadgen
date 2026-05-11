@@ -20,4 +20,5 @@ export const requireAuth: EventHandler = async (event: H3Event) => {
     });
   // You can save the session to the event context for later use
   event.context.auth = session;
+  return session;
 };
