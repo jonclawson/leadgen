@@ -14,6 +14,10 @@ import { authClient } from '../../lib/auth-client';
     <header class="site-header">
       <div class="site-header__title">My App</div>
       <nav class="site-nav">
+        <a routerLink="/articles/list" routerLinkActive="active" mat-button>
+          <mat-icon>article</mat-icon>
+          Articles
+        </a>
         @if (user()) {
           <a routerLink="/forms" routerLinkActive="active" mat-button>
             <mat-icon>description</mat-icon>

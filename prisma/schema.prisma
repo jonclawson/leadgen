@@ -22,6 +22,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   dynamicForms  DynamicForm[]
+  articles      Article[]
 
   @@map("user")
 }
@@ -113,4 +114,19 @@ model FormFieldDefinition {
 
   @@index([dynamicFormId])
   @@map("form_field_definition")
+}
+
+model Article {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  body      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([slug])
+  @@map("article")
 }

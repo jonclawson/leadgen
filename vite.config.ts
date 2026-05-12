@@ -15,11 +15,11 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     analog({
       ssr: true,
-      prerender: {
-        routes: async () => {
-          return [];
-        },
-      },
+      // prerender: {
+      //   routes: async () => {
+      //     return [];
+      //   },
+      // },
       nitro: {
         // prerender: {
         //   ignore: ['/api/**']
