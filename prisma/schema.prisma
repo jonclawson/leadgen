@@ -89,6 +89,7 @@ model DynamicForm {
   userId      String
   user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   fields      FormFieldDefinition[]
+  articles    Article[]
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
 
@@ -117,16 +118,19 @@ model FormFieldDefinition {
 }
 
 model Article {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   title     String
-  slug      String   @unique
+  slug      String       @unique
   body      String
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formId    String?
+  form      DynamicForm? @relation(fields: [formId], references: [id], onDelete: SetNull)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   @@index([userId])
   @@index([slug])
+  @@index([formId])
   @@map("article")
 }

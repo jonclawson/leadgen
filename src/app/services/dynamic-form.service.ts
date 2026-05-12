@@ -61,6 +61,10 @@ export class DynamicFormService {
     return this.http.get<{ form: DynamicFormData }>(`${this.baseUrl}/${id}`);
   }
 
+  getPublicForm(id: string): Observable<{ form: DynamicFormData }> {
+    return this.http.get<{ form: DynamicFormData }>(`${this.baseUrl}/${id}`);
+  }
+
   createForm(data: CreateFormRequest): Observable<{ form: DynamicFormData }> {
     return this.http.post<{ form: DynamicFormData }>(this.baseUrl, data);
   }

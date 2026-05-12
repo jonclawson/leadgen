@@ -6,6 +6,7 @@ interface UpdateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  formId?: string | null;
 }
 
 export default defineEventHandler(async (event) => {
@@ -73,12 +74,27 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  // Validate formId if provided (and not explicitly null)
+  if (body.formId !== undefined && body.formId !== null) {
+    const form = await prisma.dynamicForm.findUnique({
+      where: { id: body.formId }
+    });
+
+    if (!form) {
+      throw createError({
+        statusCode: 400,
+        message: 'The selected form does not exist'
+      });
+    }
+  }
+
   const article = await prisma.article.update({
     where: { id },
     data: {
       title: body.title,
       slug: body.slug,
-      body: body.body
+      body: body.body,
+      formId: body.formId !== undefined ? body.formId : existingArticle.formId
     },
     include: {
       user: {

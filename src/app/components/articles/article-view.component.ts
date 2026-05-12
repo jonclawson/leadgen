@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Article } from '../../services/article.service';
 import { authClient } from '../../../lib/auth-client';
 import { marked } from 'marked';
+import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/form.component';
 
 @Component({
   selector: 'app-article-view',
@@ -16,7 +17,8 @@ import { marked } from 'marked';
     RouterLink,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormComponent
   ],
   template: `
     <div class="article-view-container">
@@ -35,6 +37,13 @@ import { marked } from 'marked';
 
           <mat-card-content class="article-content">
             <div class="article-body markdown-content" [innerHTML]="renderedBody()"></div>
+            
+            @if (formFields().length > 0) {
+              <div class="article-form-section">
+                <h3 class="form-section-title">{{ article.form?.name }}</h3>
+                <app-form [model]="formFields()" (submit)="onFormSubmit($event)"></app-form>
+              </div>
+            }
           </mat-card-content>
 
           <mat-card-actions class="article-actions">
@@ -213,6 +222,19 @@ import { marked } from 'marked';
       padding: 16px 24px;
       border-top: 1px solid #e0e0e0;
     }
+
+    .article-form-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid #e0e0e0;
+    }
+
+    .form-section-title {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      color: #333;
+    }
   `]
 })
 export class ArticleViewComponent implements OnInit {
@@ -220,10 +242,27 @@ export class ArticleViewComponent implements OnInit {
   
   private router = inject(Router);
   currentUserId = signal<string | null>(null);
+  formFields = signal<FormField[]>([]);
 
   async ngOnInit() {
     const session = await authClient.getSession();
     this.currentUserId.set(session.data?.user?.id ?? null);
+
+    // Convert form fields if article has a form
+    if (this.article.form && this.article.form.fields) {
+      const convertedFields = this.article.form.fields.map(field => 
+        convertFormFieldDefinition({
+          ...field,
+          label: field.label ?? undefined,
+          icon: field.icon ?? undefined,
+          placeholder: field.placeholder ?? undefined,
+          validators: field.validators ?? undefined,
+          buttonLabel: field.buttonLabel ?? undefined,
+          buttonColor: field.buttonColor ?? undefined
+        })
+      );
+      this.formFields.set(convertedFields);
+    }
   }
 
   renderedBody = () => {
@@ -239,6 +278,12 @@ export class ArticleViewComponent implements OnInit {
 
   canEdit(): boolean {
     return this.currentUserId() === this.article?.userId;
+  }
+
+  onFormSubmit(data: Record<string, unknown>) {
+    console.log('Form submitted with data:', data);
+    // Form submission handling will be implemented in a future iteration
+    alert('Form submission received! (Submission handling will be added later)');
   }
 
   formatDate(date: Date): string {

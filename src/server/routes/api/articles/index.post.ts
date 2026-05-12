@@ -6,6 +6,7 @@ interface CreateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  formId?: string | null;
 }
 
 function generateSlug(title: string): string {
@@ -50,12 +51,27 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Validate formId if provided
+  if (body.formId) {
+    const form = await prisma.dynamicForm.findUnique({
+      where: { id: body.formId }
+    });
+
+    if (!form) {
+      throw createError({
+        statusCode: 400,
+        message: 'The selected form does not exist'
+      });
+    }
+  }
+
   const article = await prisma.article.create({
     data: {
       title: body.title,
       slug: slug,
       body: body.body,
-      userId: session.user.id
+      userId: session.user.id,
+      formId: body.formId || null
     },
     include: {
       user: {

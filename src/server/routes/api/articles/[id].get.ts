@@ -20,6 +20,15 @@ export default defineEventHandler(async (event) => {
           name: true,
           email: true
         }
+      },
+      form: {
+        select: {
+          id: true,
+          name: true,
+          fields: {
+            orderBy: { order: 'asc' }
+          }
+        }
       }
     }
   });

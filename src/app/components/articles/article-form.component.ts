@@ -7,7 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 import { Article } from '../../services/article.service';
+import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-form.service';
 import { marked } from 'marked';
 import { debounceTime } from 'rxjs/operators';
 
@@ -22,7 +24,8 @@ import { debounceTime } from 'rxjs/operators';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   template: `
     <div class="article-form-container">
@@ -75,6 +78,17 @@ import { debounceTime } from 'rxjs/operators';
                   </div>
                 </mat-tab>
               </mat-tab-group>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Optional Form</mat-label>
+                <mat-select formControlName="formId">
+                  <mat-option [value]="null">None</mat-option>
+                  @for (form of availableForms(); track form.id) {
+                    <mat-option [value]="form.id">{{ form.name }}</mat-option>
+                  }
+                </mat-select>
+                <mat-hint>Select a form to display at the bottom of your article</mat-hint>
+              </mat-form-field>
             </div>
           </mat-card-content>
 
@@ -196,13 +210,15 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ArticleFormComponent implements OnInit {
   @Input() article?: Article;
-  @Output() save = new EventEmitter<{ title: string; slug: string; body: string }>();
+  @Output() save = new EventEmitter<{ title: string; slug: string; body: string; formId?: string | null }>();
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
+  private formService = inject(DynamicFormService);
   
   articleForm!: FormGroup;
   submitting = signal(false);
+  availableForms = signal<DynamicFormListItem[]>([]);
   
   markdownPreview = computed(() => {
     const body = this.articleForm?.get('body')?.value || '';
@@ -221,7 +237,18 @@ export class ArticleFormComponent implements OnInit {
     this.articleForm = this.fb.group({
       title: [this.article?.title || '', [Validators.required]],
       slug: [this.article?.slug || '', [Validators.required]],
-      body: [this.article?.body || '', [Validators.required]]
+      body: [this.article?.body || '', [Validators.required]],
+      formId: [this.article?.formId || null]
+    });
+
+    // Load available forms
+    this.formService.getForms().subscribe({
+      next: (response) => {
+        this.availableForms.set(response.forms);
+      },
+      error: (error) => {
+        console.error('Error loading forms:', error);
+      }
     });
 
     // Auto-generate slug from title when creating new article
@@ -263,7 +290,8 @@ export class ArticleFormComponent implements OnInit {
       this.save.emit({
         title: formValue.title,
         slug: formValue.slug,
-        body: formValue.body
+        body: formValue.body,
+        formId: formValue.formId
       });
     }
   }

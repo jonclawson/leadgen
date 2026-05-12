@@ -14,6 +14,7 @@ export interface ArticleListItem {
   slug: string;
   body: string; // excerpt
   author: ArticleAuthor;
+  formId?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,23 @@ export interface Article {
   body: string;
   userId: string;
   author: ArticleAuthor;
+  formId?: string | null;
+  form?: {
+    id: string;
+    name: string;
+    fields: Array<{
+      id: string;
+      type: string;
+      key: string;
+      label?: string | null;
+      icon?: string | null;
+      placeholder?: string | null;
+      validators?: string | null;
+      buttonLabel?: string | null;
+      buttonColor?: string | null;
+      order: number;
+    }>;
+  } | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,12 +51,14 @@ export interface CreateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  formId?: string | null;
 }
 
 export interface UpdateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  formId?: string | null;
 }
 
 @Injectable({
