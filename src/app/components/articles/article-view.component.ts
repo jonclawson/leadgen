@@ -26,7 +26,7 @@ import { marked } from 'marked';
             <div class="article-header-content">
               <mat-card-title class="article-title">{{ article.title }}</mat-card-title>
               <mat-card-subtitle class="article-meta">
-                <span>By {{ article.author.name || article.author.email }}</span>
+                <!-- <span>By {{ article.author.name || article.author.email }}</span> -->
                 <span class="separator">•</span>
                 <span>{{ formatDate(article.createdAt) }}</span>
               </mat-card-subtitle>
@@ -227,7 +227,8 @@ export class ArticleViewComponent implements OnInit {
   }
 
   renderedBody = () => {
-    if (!this.article?.body) return '';
+    console.log('Rendering article body:', this.article.body);
+    if (!this.article?.body) return 'no content';
     try {
       return marked.parse(this.article.body) as string;
     } catch (e) {
