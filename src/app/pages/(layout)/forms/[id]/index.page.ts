@@ -235,9 +235,9 @@ export default class FormViewPage implements OnInit {
   onFormSubmit(values: any) {
     console.log('Form submitted:', values);
     this.submittedData.set(values);
-    // this.snackBar.open('Form submitted successfully!', 'Close', { 
-    //   duration: 5000,
-    //   panelClass: 'success-snackbar'
-    // });
+    this.snackBar.open('Form submitted successfully!', 'Close', { 
+      duration: 5000,
+      panelClass: 'success-snackbar'
+    });
   }
 }

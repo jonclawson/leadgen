@@ -180,7 +180,7 @@ export default class FormListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading forms:', error);
-        // this.snackBar.open('Error loading forms', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading forms', 'Close', { duration: 2000 });
         this.loading.set(false);
       }
     });
@@ -193,12 +193,12 @@ export default class FormListComponent implements OnInit {
 
     this.formService.deleteForm(form.id).subscribe({
       next: () => {
-        // this.snackBar.open('Form deleted successfully', 'Close', { duration: 3000 });
+        this.snackBar.open('Form deleted successfully', 'Close', { duration: 3000 });
         this.loadForms();
       },
       error: (error) => {
         console.error('Error deleting form:', error);
-        // this.snackBar.open('Error deleting form', 'Close', { duration: 3000 });
+        this.snackBar.open('Error deleting form', 'Close', { duration: 3000 });
       }
     });
   }

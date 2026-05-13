@@ -335,7 +335,7 @@ export default class FormBuilderComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading form:', error);
-        // this.snackBar.open('Error loading form', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading form', 'Close', { duration: 3000 });
         this.router.navigate(['/forms']);
       }
     });
@@ -393,12 +393,12 @@ export default class FormBuilderComponent implements OnInit {
 
   onPreviewSubmit(values: any) {
     console.log('Preview form submitted:', values);
-    // this.snackBar.open('This is just a preview - no data was submitted', 'Close', { duration: 3000 });
+    this.snackBar.open('This is just a preview - no data was submitted', 'Close', { duration: 3000 });
   }
 
   saveForm() {
     if (this.detailsForm.invalid || this.fields().length === 0) {
-      // this.snackBar.open('Please fill in all required fields', 'Close', { duration: 3000 });
+      this.snackBar.open('Please fill in all required fields', 'Close', { duration: 3000 });
       return;
     }
 
@@ -419,16 +419,16 @@ export default class FormBuilderComponent implements OnInit {
 
     request.subscribe({
       next: () => {
-        // this.snackBar.open(
-        //   id ? 'Form updated successfully' : 'Form created successfully',
-        //   'Close',
-        //   { duration: 3000 }
-        // );
+        this.snackBar.open(
+          id ? 'Form updated successfully' : 'Form created successfully',
+          'Close',
+          { duration: 3000 }
+        );
         this.router.navigate(['/forms']);
       },
       error: (error) => {
         console.error('Error saving form:', error);
-        // this.snackBar.open('Error saving form', 'Close', { duration: 3000 });
+        this.snackBar.open('Error saving form', 'Close', { duration: 3000 });
         this.saving.set(false);
       }
     });

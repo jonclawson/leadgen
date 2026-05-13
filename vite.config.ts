@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => ({
           // All admin URLs are only rendered on the client
           '/index': { ssr: false },
           '/signup': { ssr: false },
+          '/forms': { ssr: false },
         },
       },
     }),
