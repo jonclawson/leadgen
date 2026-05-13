@@ -35,7 +35,7 @@ export default class SigninComponent implements OnInit {
     
   readonly signInModel: FormField[] = [
     {
-      type: 'email',
+      type: 'text',
       key: 'email',
       label: 'Email Address',
       icon: 'email',

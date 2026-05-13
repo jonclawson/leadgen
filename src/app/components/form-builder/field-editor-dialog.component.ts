@@ -38,7 +38,7 @@ interface ValidatorOption {
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Field Type</mat-label>
           <mat-select formControlName="type" required>
-            <mat-option value="email">Email</mat-option>
+            <mat-option value="text">Text</mat-option>
             <mat-option value="password">Password</mat-option>
             <mat-option value="button">Button</mat-option>
           </mat-select>
@@ -197,7 +197,7 @@ export default class FieldEditorDialogComponent {
     { value: 'pattern', label: 'Pattern (RegEx)', hasParam: true }
   ];
 
-  fieldType = signal<string>('email');
+  fieldType = signal<string>('text');
 
   constructor() {
     this.initForm();
@@ -206,8 +206,10 @@ export default class FieldEditorDialogComponent {
   initForm() {
     const field = this.data.field;
     
+    const initialType = field?.type === 'email' ? 'text' : (field?.type || 'text');
+
     this.fieldForm = this.fb.group({
-      type: [field?.type || 'email', Validators.required],
+      type: [initialType, Validators.required],
       key: [field?.key || '', [Validators.required, this.keyValidator.bind(this)]],
       label: [field?.label || '', Validators.required],
       icon: [field?.icon || ''],
@@ -223,9 +225,9 @@ export default class FieldEditorDialogComponent {
     });
 
     // Set initial value and validators
-    const initialType = this.fieldForm.get('type')?.value || 'email';
-    this.fieldType.set(initialType);
-    this.updateFieldValidators(initialType);
+    const currentType = this.fieldForm.get('type')?.value || 'text';
+    this.fieldType.set(currentType);
+    this.updateFieldValidators(currentType);
 
     // Parse existing validators
     if (field?.validators) {

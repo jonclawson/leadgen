@@ -6,7 +6,7 @@ import PasswordFieldComponent from './fields/password-field.component';
 import SubmitButtonComponent from './fields/submit-button.component';
 import type { FormFieldDefinitionData } from '../../services/dynamic-form.service';
 
-export type FormFieldType = 'email' | 'password' | 'button';
+export type FormFieldType = 'text' | 'password' | 'button';
 
 // For runtime use with ValidatorFn[]
 export interface FormFieldDefinition {
@@ -23,8 +23,8 @@ export interface FormFieldDefinition {
   order?: number;
 }
 
-export interface EmailField {
-  type: 'email';
+export interface TextField {
+  type: 'text';
   key: string;
   label: string;
   icon: string;
@@ -51,7 +51,7 @@ export interface ButtonField {
   disabled?: boolean;
 }
 
-export type FormField = EmailField | PasswordField | ButtonField;
+export type FormField = TextField | PasswordField | ButtonField;
 
 // Utility function to parse validator string into ValidatorFn[]
 export function parseValidators(validatorString?: string): ValidatorFn[] {
@@ -82,9 +82,10 @@ export function parseValidators(validatorString?: string): ValidatorFn[] {
 
 // Convert FormFieldDefinitionData from API to FormField for runtime use
 export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormField {
-  const type = def.type as FormFieldType;
+  const rawType = def.type;
+  const type = rawType === 'email' ? 'text' : (rawType as FormFieldType);
   
-  if (type === 'email' || type === 'password') {
+  if (type === 'text' || type === 'password') {
     return {
       type,
       key: def.key,
@@ -92,7 +93,7 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
       icon: def.icon || '',
       placeholder: def.placeholder || '',
       validators: parseValidators(def.validators)
-    } as EmailField | PasswordField;
+    } as TextField | PasswordField;
   } else {
     return {
       type: 'button',
@@ -110,7 +111,7 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
   template: `
     <form [formGroup]="formGroup()" (ngSubmit)="onSubmit($event)">
       @for (field of model(); track field.key) {
-        @if (field.type === 'email') {
+        @if (field.type === 'text') {
           <app-text-field
             [formGroup]="formGroup()"
             [controlName]="field.key"
