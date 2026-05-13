@@ -197,7 +197,7 @@ export default class FieldEditorDialogComponent {
     { value: 'pattern', label: 'Pattern (RegEx)', hasParam: true }
   ];
 
-  fieldType = computed(() => this.fieldForm?.get('type')?.value || 'email');
+  fieldType = signal<string>('email');
 
   constructor() {
     this.initForm();
@@ -215,6 +215,14 @@ export default class FieldEditorDialogComponent {
       buttonLabel: [field?.buttonLabel || ''],
       buttonColor: [field?.buttonColor || 'primary']
     });
+
+    // Update fieldType signal when type changes
+    this.fieldForm.get('type')?.valueChanges.subscribe((type) => {
+      this.fieldType.set(type);
+    });
+
+    // Set initial value
+    this.fieldType.set(this.fieldForm.get('type')?.value || 'email');
 
     // Parse existing validators
     if (field?.validators) {
@@ -311,7 +319,7 @@ export default class FieldEditorDialogComponent {
     const type = this.fieldForm.value.type;
     const result: FormFieldDefinitionData = {
       type,
-      key: type === 'button' ? '' : this.fieldForm.value.key,
+      key: type === 'button' ? 'submit' : this.fieldForm.value.key,
       label: type === 'button' ? '' : this.fieldForm.value.label,
       icon: type === 'button' ? '' : (this.fieldForm.value.icon || undefined),
       placeholder: type === 'button' ? '' : (this.fieldForm.value.placeholder || undefined),
