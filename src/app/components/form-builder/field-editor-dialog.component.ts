@@ -219,36 +219,18 @@ export default class FieldEditorDialogComponent {
     // Update fieldType signal when type changes
     this.fieldForm.get('type')?.valueChanges.subscribe((type) => {
       this.fieldType.set(type);
+      this.updateFieldValidators(type);
     });
 
-    // Set initial value
-    this.fieldType.set(this.fieldForm.get('type')?.value || 'email');
+    // Set initial value and validators
+    const initialType = this.fieldForm.get('type')?.value || 'email';
+    this.fieldType.set(initialType);
+    this.updateFieldValidators(initialType);
 
     // Parse existing validators
     if (field?.validators) {
       this.parseValidators(field.validators);
     }
-
-    // Update form validation when type changes
-    this.fieldForm.get('type')?.valueChanges.subscribe((type) => {
-      const keyControl = this.fieldForm.get('key');
-      const labelControl = this.fieldForm.get('label');
-      const buttonLabelControl = this.fieldForm.get('buttonLabel');
-
-      if (type === 'button') {
-        keyControl?.clearValidators();
-        labelControl?.clearValidators();
-        buttonLabelControl?.setValidators(Validators.required);
-      } else {
-        keyControl?.setValidators([Validators.required, this.keyValidator.bind(this)]);
-        labelControl?.setValidators(Validators.required);
-        buttonLabelControl?.clearValidators();
-      }
-
-      keyControl?.updateValueAndValidity();
-      labelControl?.updateValueAndValidity();
-      buttonLabelControl?.updateValueAndValidity();
-    });
   }
 
   keyValidator(control: any) {
@@ -257,6 +239,26 @@ export default class FieldEditorDialogComponent {
       return { duplicate: true };
     }
     return null;
+  }
+
+  updateFieldValidators(type: string) {
+    const keyControl = this.fieldForm.get('key');
+    const labelControl = this.fieldForm.get('label');
+    const buttonLabelControl = this.fieldForm.get('buttonLabel');
+
+    if (type === 'button') {
+      keyControl?.clearValidators();
+      labelControl?.clearValidators();
+      buttonLabelControl?.setValidators(Validators.required);
+    } else {
+      keyControl?.setValidators([Validators.required, this.keyValidator.bind(this)]);
+      labelControl?.setValidators(Validators.required);
+      buttonLabelControl?.clearValidators();
+    }
+
+    keyControl?.updateValueAndValidity();
+    labelControl?.updateValueAndValidity();
+    buttonLabelControl?.updateValueAndValidity();
   }
 
   parseValidators(validatorsStr: string) {
