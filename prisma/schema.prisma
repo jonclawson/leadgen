@@ -101,12 +101,13 @@ model FormFieldDefinition {
   id            String      @id @default(cuid())
   dynamicFormId String
   dynamicForm   DynamicForm @relation(fields: [dynamicFormId], references: [id], onDelete: Cascade)
-  type          String      // 'email' | 'password' | 'button'
+  type          String      // 'email' | 'password' | 'button' | 'textarea' | 'select' | 'checkbox' | 'radio'
   key           String
   label         String?
   icon          String?
   placeholder   String?
   validators    String?     // CSV string like "required,email,minLength:8"
+  options       String?     // JSON string for select/radio options or field config
   buttonLabel   String?
   buttonColor   String?     // 'primary' | 'accent' | 'warn'
   order         Int         @default(0)

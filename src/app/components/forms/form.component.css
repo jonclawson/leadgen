@@ -2,7 +2,7 @@
   display: grid;
   gap: 1rem;
   width: min(100%, 640px);
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
   padding: 1rem 0;
   grid-template-columns: 1fr;
@@ -15,11 +15,15 @@
 }
 
 :host ::ng-deep mat-form-field {
-  min-width: 300px;
+  min-width: 400px;
 }
 
 .field-row app-text-field,
 .field-row app-password-field,
+.field-row app-textarea-field,
+.field-row app-select-field,
+.field-row app-checkbox-field,
+.field-row app-radio-field,
 .field-row mat-form-field {
   width: 100%;
 }

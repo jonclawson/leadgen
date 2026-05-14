@@ -40,6 +40,10 @@ interface ValidatorOption {
           <mat-select formControlName="type" required>
             <mat-option value="text">Text</mat-option>
             <mat-option value="password">Password</mat-option>
+            <mat-option value="textarea">Textarea</mat-option>
+            <mat-option value="select">Select (Dropdown)</mat-option>
+            <mat-option value="checkbox">Checkbox</mat-option>
+            <mat-option value="radio">Radio Buttons</mat-option>
             <mat-option value="button">Button</mat-option>
           </mat-select>
         </mat-form-field>
@@ -79,28 +83,89 @@ interface ValidatorOption {
               placeholder="e.g., Enter your email">
           </mat-form-field>
 
-          <div class="validators-section">
-            <h4>Validators</h4>
-            <div class="validators-grid">
-              @for (validator of availableValidators; track validator.value) {
-                <div class="validator-option">
-                  <mat-checkbox 
-                    [checked]="selectedValidators().includes(validator.value)"
-                    (change)="toggleValidator(validator.value, $event.checked)">
-                    {{ validator.label }}
-                  </mat-checkbox>
-                  @if (validator.hasParam && selectedValidators().includes(validator.value)) {
-                    <mat-form-field appearance="outline" class="param-input">
+          @if (fieldType() === 'textarea') {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Rows</mat-label>
+              <input matInput type="number" formControlName="rows" 
+                placeholder="3" min="1" max="20">
+              <mat-hint>Number of visible text lines (default: 3)</mat-hint>
+            </mat-form-field>
+          }
+
+          @if (fieldType() === 'select' || fieldType() === 'radio') {
+            <div class="options-section">
+              <h4>Options</h4>
+              <div class="options-list">
+                @for (option of fieldOptions(); track $index) {
+                  <div class="option-row">
+                    <mat-form-field appearance="outline" class="option-value">
                       <mat-label>Value</mat-label>
-                      <input matInput type="number" 
-                        [value]="getValidatorParam(validator.value)"
-                        (input)="updateValidatorParam(validator.value, $any($event.target).value)">
+                      <input matInput 
+                        [value]="option.value"
+                        (input)="updateOption($index, 'value', $any($event.target).value)">
                     </mat-form-field>
-                  }
-                </div>
-              }
+                    <mat-form-field appearance="outline" class="option-label">
+                      <mat-label>Label</mat-label>
+                      <input matInput 
+                        [value]="option.label"
+                        (input)="updateOption($index, 'label', $any($event.target).value)">
+                    </mat-form-field>
+                    <button mat-icon-button color="warn" type="button" 
+                      (click)="removeOption($index)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+              <button mat-stroked-button type="button" (click)="addOption()">
+                <mat-icon>add</mat-icon> Add Option
+              </button>
             </div>
-          </div>
+          }
+
+          @if (fieldType() === 'checkbox') {
+            <div class="checkbox-config">
+              <mat-checkbox formControlName="checkedByDefault">
+                Checked by default
+              </mat-checkbox>
+            </div>
+          }
+
+          @if (fieldType() !== 'checkbox' && fieldType() !== 'radio' && fieldType() !== 'select') {
+            <div class="validators-section">
+              <h4>Validators</h4>
+              <div class="validators-grid">
+                @for (validator of availableValidators; track validator.value) {
+                  <div class="validator-option">
+                    <mat-checkbox 
+                      [checked]="selectedValidators().includes(validator.value)"
+                      (change)="toggleValidator(validator.value, $event.checked)">
+                      {{ validator.label }}
+                    </mat-checkbox>
+                    @if (validator.hasParam && selectedValidators().includes(validator.value)) {
+                      <mat-form-field appearance="outline" class="param-input">
+                        <mat-label>Value</mat-label>
+                        <input matInput type="number" 
+                          [value]="getValidatorParam(validator.value)"
+                          (input)="updateValidatorParam(validator.value, $any($event.target).value)">
+                      </mat-form-field>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          @if (fieldType() === 'checkbox' || fieldType() === 'select' || fieldType() === 'radio') {
+            <div class="validators-section">
+              <h4>Validators</h4>
+              <mat-checkbox 
+                [checked]="selectedValidators().includes('required')"
+                (change)="toggleValidator('required', $event.checked)">
+                Required
+              </mat-checkbox>
+            </div>
+          }
         } @else {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Button Label</mat-label>
@@ -170,6 +235,50 @@ interface ValidatorOption {
       margin-bottom: -1.25em;
     }
 
+    .options-section {
+      margin-top: 16px;
+    }
+
+    .options-section h4 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .option-value {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .option-label {
+      flex: 2;
+      min-width: 200px;
+    }
+
+    .option-row mat-form-field {
+      margin-bottom: -1.25em;
+    }
+
+    .checkbox-config {
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 4px;
+    }
+
     mat-dialog-content {
       max-height: 70vh;
       overflow-y: auto;
@@ -188,6 +297,7 @@ export default class FieldEditorDialogComponent {
   fieldForm!: FormGroup;
   selectedValidators = signal<string[]>([]);
   validatorParams = signal<Record<string, string>>({});
+  fieldOptions = signal<Array<{ value: string; label: string }>>([]);
 
   availableValidators: ValidatorOption[] = [
     { value: 'required', label: 'Required' },
@@ -214,6 +324,8 @@ export default class FieldEditorDialogComponent {
       label: [field?.label || '', Validators.required],
       icon: [field?.icon || ''],
       placeholder: [field?.placeholder || ''],
+      rows: [3],
+      checkedByDefault: [false],
       buttonLabel: [field?.buttonLabel || ''],
       buttonColor: [field?.buttonColor || 'primary']
     });
@@ -232,6 +344,11 @@ export default class FieldEditorDialogComponent {
     // Parse existing validators
     if (field?.validators) {
       this.parseValidators(field.validators);
+    }
+
+    // Parse existing options
+    if (field?.options) {
+      this.parseOptions(field.options, initialType);
     }
   }
 
@@ -315,12 +432,80 @@ export default class FieldEditorDialogComponent {
       .join(',');
   }
 
+  parseOptions(optionsStr: string, type: string) {
+    try {
+      const parsed = JSON.parse(optionsStr);
+      
+      if (type === 'select' || type === 'radio') {
+        // Options is an array of {value, label} objects
+        if (Array.isArray(parsed)) {
+          this.fieldOptions.set(parsed);
+        }
+      } else if (type === 'textarea') {
+        // Options is a config object like {rows: 5}
+        if (parsed.rows) {
+          this.fieldForm.patchValue({ rows: parsed.rows });
+        }
+      } else if (type === 'checkbox') {
+        // Options is a config object like {checked: true}
+        if (parsed.checked !== undefined) {
+          this.fieldForm.patchValue({ checkedByDefault: parsed.checked });
+        }
+      }
+    } catch (e) {
+      // Invalid JSON, ignore
+    }
+  }
+
+  addOption() {
+    this.fieldOptions.update(options => [
+      ...options,
+      { value: '', label: '' }
+    ]);
+  }
+
+  removeOption(index: number) {
+    this.fieldOptions.update(options => options.filter((_, i) => i !== index));
+  }
+
+  updateOption(index: number, field: 'value' | 'label', value: string) {
+    this.fieldOptions.update(options => {
+      const updated = [...options];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }
+
   save() {
     if (this.fieldForm.invalid) {
       return;
     }
 
     const type = this.fieldForm.value.type;
+    
+    // Build options JSON string based on field type
+    let optionsJson: string | undefined = undefined;
+    
+    if (type === 'select' || type === 'radio') {
+      // Store array of options
+      const options = this.fieldOptions();
+      if (options.length > 0) {
+        optionsJson = JSON.stringify(options);
+      }
+    } else if (type === 'textarea') {
+      // Store config object with rows
+      const rows = this.fieldForm.value.rows;
+      if (rows && rows !== 3) {
+        optionsJson = JSON.stringify({ rows });
+      }
+    } else if (type === 'checkbox') {
+      // Store config object with checked default
+      const checked = this.fieldForm.value.checkedByDefault;
+      if (checked) {
+        optionsJson = JSON.stringify({ checked });
+      }
+    }
+
     const result: FormFieldDefinitionData = {
       type,
       key: type === 'button' ? 'submit' : this.fieldForm.value.key,
@@ -328,6 +513,7 @@ export default class FieldEditorDialogComponent {
       icon: type === 'button' ? '' : (this.fieldForm.value.icon || undefined),
       placeholder: type === 'button' ? '' : (this.fieldForm.value.placeholder || undefined),
       validators: type === 'button' ? '' : (this.buildValidatorsString() || undefined),
+      options: optionsJson,
       buttonLabel: type === 'button' ? this.fieldForm.value.buttonLabel : undefined,
       buttonColor: type === 'button' ? this.fieldForm.value.buttonColor : undefined,
       order: this.data.field?.order || 0

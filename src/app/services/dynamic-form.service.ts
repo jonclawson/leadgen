@@ -19,6 +19,7 @@ export interface FormFieldDefinitionData {
   icon?: string;
   placeholder?: string;
   validators?: string;
+  options?: string;
   buttonLabel?: string;
   buttonColor?: string;
   order: number;
