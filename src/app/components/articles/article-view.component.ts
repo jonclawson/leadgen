@@ -257,6 +257,7 @@ export class ArticleViewComponent implements OnInit {
           icon: field.icon ?? undefined,
           placeholder: field.placeholder ?? undefined,
           validators: field.validators ?? undefined,
+          options: field.options ?? undefined,
           buttonLabel: field.buttonLabel ?? undefined,
           buttonColor: field.buttonColor ?? undefined
         })

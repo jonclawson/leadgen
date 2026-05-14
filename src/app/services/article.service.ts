@@ -38,6 +38,7 @@ export interface Article {
       icon?: string | null;
       placeholder?: string | null;
       validators?: string | null;
+      options?: string | null;
       buttonLabel?: string | null;
       buttonColor?: string | null;
       order: number;

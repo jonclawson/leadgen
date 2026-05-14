@@ -354,6 +354,14 @@ export default class FieldEditorDialogComponent {
 
   keyValidator(control: any) {
     const key = control.value;
+    const originalKey = this.data.field?.key;
+    
+    // If editing and the key hasn't changed, it's valid
+    if (originalKey && key === originalKey) {
+      return null;
+    }
+    
+    // Check if the key is already used by another field
     if (key && this.data.existingKeys.includes(key)) {
       return { duplicate: true };
     }

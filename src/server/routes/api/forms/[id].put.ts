@@ -13,6 +13,7 @@ interface UpdateFormRequest {
     icon?: string;
     placeholder?: string;
     validators?: string;
+    options?: string;
     buttonLabel?: string;
     buttonColor?: string;
     order: number;
@@ -68,6 +69,7 @@ export default defineEventHandler(async (event) => {
           icon: field.icon,
           placeholder: field.placeholder,
           validators: field.validators,
+          options: field.options,
           buttonLabel: field.buttonLabel,
           buttonColor: field.buttonColor,
           order: field.order
