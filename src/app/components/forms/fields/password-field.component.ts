@@ -23,6 +23,8 @@ import { CommonModule } from '@angular/common';
       <input matInput
              [type]="hidePassword() ? 'password' : 'text'"
              [formControl]="control()"
+             [name]="controlName()"
+             [autocomplete]="controlName()"
              [placeholder]="placeholder()"
              autocomplete="current-password"
              class="field__input--text">

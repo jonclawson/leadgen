@@ -20,7 +20,9 @@ import { CommonModule } from '@angular/common';
       <mat-label>{{ label() }}</mat-label>
       <input matInput 
         [type]="type()"
-        [formControl]="control()" 
+        [formControl]="control()"
+        [name]="controlName()"
+        [autocomplete]="controlName()"
         [placeholder]="placeholder()"
         class="field__input--text">
       @if (icon()) {
