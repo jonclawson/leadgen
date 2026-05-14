@@ -11,18 +11,19 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  email         String        @unique
-  name          String?
-  messages      Message[]
-  emailVerified Boolean       @default(false)
-  image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  dynamicForms  DynamicForm[]
-  articles      Article[]
+  id                String              @id @default(cuid())
+  email             String              @unique
+  name              String?
+  messages          Message[]
+  emailVerified     Boolean             @default(false)
+  image             String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  sessions          Session[]
+  accounts          Account[]
+  dynamicForms      DynamicForm[]
+  articles          Article[]
+  formSubmissions   FormSubmission[]
 
   @@map("user")
 }
@@ -90,6 +91,7 @@ model DynamicForm {
   user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   fields      FormFieldDefinition[]
   articles    Article[]
+  submissions FormSubmission[]
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
 
@@ -119,19 +121,39 @@ model FormFieldDefinition {
 }
 
 model Article {
-  id        String       @id @default(cuid())
-  title     String
-  slug      String       @unique
-  body      String
-  userId    String
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  formId    String?
-  form      DynamicForm? @relation(fields: [formId], references: [id], onDelete: SetNull)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id          String              @id @default(cuid())
+  title       String
+  slug        String              @unique
+  body        String
+  userId      String
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formId      String?
+  form        DynamicForm?        @relation(fields: [formId], references: [id], onDelete: SetNull)
+  submissions FormSubmission[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   @@index([userId])
   @@index([slug])
   @@index([formId])
   @@map("article")
+}
+
+model FormSubmission {
+  id        String      @id @default(cuid())
+  formId    String
+  form      DynamicForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      String      // JSON string with form submission data
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([formId])
+  @@index([articleId])
+  @@index([createdAt])
+  @@map("form_submission")
 }

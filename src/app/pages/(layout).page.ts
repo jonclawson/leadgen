@@ -23,6 +23,10 @@ import { authClient } from '../../lib/auth-client';
             <mat-icon>description</mat-icon>
             Forms
           </a>
+          <a routerLink="/submissions" routerLinkActive="active" mat-button>
+            <mat-icon>mail</mat-icon>
+            Submissions
+          </a>
         }
       </nav>
       <div class="site-header__auth">

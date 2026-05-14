@@ -11,6 +11,7 @@
 
 .signup__card {
   @apply w-full max-w-md shadow-2xl;
+  margin: 0 auto;
 }
 
 .signup__header {

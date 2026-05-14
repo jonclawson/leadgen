@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => ({
           '/index': { ssr: false },
           '/signup': { ssr: false },
           '/forms': { ssr: false },
+          '/submissions': { ssr: false },
         },
       },
     }),

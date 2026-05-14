@@ -4,7 +4,9 @@ import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Article } from '../../services/article.service';
+import { FormSubmissionService } from '../../services/form-submission.service';
 import { authClient } from '../../../lib/auth-client';
 import { marked } from 'marked';
 import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/form.component';
@@ -18,6 +20,7 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
     MatCardModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
     FormComponent
   ],
   template: `
@@ -41,7 +44,10 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
             @if (formFields().length > 0) {
               <div class="article-form-section">
                 <h3 class="form-section-title">{{ article.form?.name }}</h3>
-                <app-form [model]="formFields()" (submit)="onFormSubmit($event)"></app-form>
+                <app-form 
+                  [model]="getFormFieldsWithLoadingState()" 
+                  (submit)="onFormSubmit($event)">
+                </app-form>
               </div>
             }
           </mat-card-content>
@@ -241,8 +247,12 @@ export class ArticleViewComponent implements OnInit {
   @Input() article!: Article;
   
   private router = inject(Router);
+  private formSubmissionService = inject(FormSubmissionService);
+  private snackBar = inject(MatSnackBar);
+  
   currentUserId = signal<string | null>(null);
   formFields = signal<FormField[]>([]);
+  isSubmittingForm = signal(false);
 
   async ngOnInit() {
     const session = await authClient.getSession();
@@ -281,10 +291,44 @@ export class ArticleViewComponent implements OnInit {
     return this.currentUserId() === this.article?.userId;
   }
 
+  getFormFieldsWithLoadingState(): FormField[] {
+    const fields = this.formFields();
+    if (!this.isSubmittingForm()) {
+      return fields;
+    }
+
+    // When submitting, disable the button field
+    return fields.map(field => {
+      if (field.type === 'button') {
+        return { ...field, disabled: true };
+      }
+      return field;
+    });
+  }
+
   onFormSubmit(data: Record<string, unknown>) {
-    console.log('Form submitted with data:', data);
-    // Form submission handling will be implemented in a future iteration
-    alert('Form submission received! (Submission handling will be added later)');
+    if (!this.article?.formId) {
+      this.snackBar.open('Form ID not found', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.isSubmittingForm.set(true);
+
+    this.formSubmissionService
+      .submitForm(this.article.formId, this.article.id, data)
+      .subscribe({
+        next: (response) => {
+          this.isSubmittingForm.set(false);
+          this.snackBar.open('Form submitted successfully!', 'Close', { duration: 3000 });
+          console.log('Form submission successful:', response);
+        },
+        error: (error) => {
+          this.isSubmittingForm.set(false);
+          const errorMessage = error?.error?.message || 'Failed to submit form';
+          this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
+          console.error('Form submission error:', error);
+        }
+      });
   }
 
   formatDate(date: Date): string {
