@@ -97,6 +97,11 @@ import './submissions.component.css';
               <td mat-cell *matCellDef="let row">{{ row.article.title }}</td>
             </ng-container>
 
+            <ng-container matColumnDef="data">
+              <th mat-header-cell *matHeaderCellDef>Form Data</th>
+              <td mat-cell *matCellDef="let row" class="data-cell">{{ formatDataPreview(row.data) }}</td>
+            </ng-container>
+
             <ng-container matColumnDef="createdAt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Submitted</th>
               <td mat-cell *matCellDef="let row">{{ formatDate(row.createdAt) }}</td>
@@ -147,7 +152,7 @@ export default class SubmissionsPage implements OnInit, OnDestroy {
   sortOrder = signal('desc');
 
   dataSource: MatTableDataSource<FormSubmission> = new MatTableDataSource();
-  displayedColumns = ['formName', 'articleTitle', 'createdAt', 'actions'];
+  displayedColumns = ['formName', 'articleTitle', 'data', 'createdAt', 'actions'];
 
   filterForm: FormGroup;
 
@@ -275,5 +280,20 @@ export default class SubmissionsPage implements OnInit, OnDestroy {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  formatDataPreview(data: string): string {
+    try {
+      const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+      const entries = Object.entries(parsed);
+      const parts = entries.map(([key, value]) => {
+        const strValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+        return `${key}: ${strValue}`;
+      });
+      const preview = parts.join(', ');
+      return preview.length > 120 ? preview.substring(0, 120) + '...' : preview;
+    } catch {
+      return data || 'No data';
+    }
   }
 }
