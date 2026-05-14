@@ -26,7 +26,6 @@
 
 .site-main {
   @apply section px-4 py-8; 
-  text-align: center;
 }
 
 .site-footer {

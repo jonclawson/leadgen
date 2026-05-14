@@ -112,31 +112,37 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
     <form [formGroup]="formGroup()" (ngSubmit)="onSubmit($event)">
       @for (field of model(); track field.key) {
         @if (field.type === 'text') {
-          <app-text-field
-            [formGroup]="formGroup()"
-            [controlName]="field.key"
-            [label]="field.label"
-            [icon]="field.icon"
-            [placeholder]="field.placeholder">
-          </app-text-field>
+          <div>
+            <app-text-field
+              [formGroup]="formGroup()"
+              [controlName]="field.key"
+              [label]="field.label"
+              [icon]="field.icon"
+              [placeholder]="field.placeholder">
+            </app-text-field>
+          </div>
         }
 
         @if (field.type === 'password') {
-          <app-password-field
-            [formGroup]="formGroup()"
-            [controlName]="field.key"
-            [label]="field.label"
-            [icon]="field.icon"
-            [placeholder]="field.placeholder">
-          </app-password-field>
+          <div>
+            <app-password-field
+              [formGroup]="formGroup()"
+              [controlName]="field.key"
+              [label]="field.label"
+              [icon]="field.icon"
+              [placeholder]="field.placeholder">
+            </app-password-field>
+          </div>
         }
 
         @if (field.type === 'button') {
-          <app-submit-button
-            [label]="field.buttonLabel"
-            [disabled]="field.disabled || formGroup().invalid"
-            [color]="field.buttonColor || 'primary'">
-          </app-submit-button>
+          <div>
+            <app-submit-button
+              [label]="field.buttonLabel"
+              [disabled]="field.disabled || formGroup().invalid"
+              [color]="field.buttonColor || 'primary'">
+            </app-submit-button>
+          </div>
         }
       }
     </form>
