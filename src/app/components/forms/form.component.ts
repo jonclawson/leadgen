@@ -108,11 +108,12 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
   selector: 'app-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TextFieldComponent, PasswordFieldComponent, SubmitButtonComponent],
+  styleUrls: ['./form.component.css'],
   template: `
-    <form [formGroup]="formGroup()" (ngSubmit)="onSubmit($event)">
+    <form class="form" [formGroup]="formGroup()" (ngSubmit)="onSubmit($event)">
       @for (field of model(); track field.key) {
         @if (field.type === 'text') {
-          <div>
+          <div class="field-row">
             <app-text-field
               [formGroup]="formGroup()"
               [controlName]="field.key"
@@ -124,7 +125,7 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
         }
 
         @if (field.type === 'password') {
-          <div>
+          <div class="field-row">
             <app-password-field
               [formGroup]="formGroup()"
               [controlName]="field.key"
@@ -136,7 +137,7 @@ export function convertFormFieldDefinition(def: FormFieldDefinitionData): FormFi
         }
 
         @if (field.type === 'button') {
-          <div>
+          <div class="form-actions">
             <app-submit-button
               [label]="field.buttonLabel"
               [disabled]="field.disabled || formGroup().invalid"

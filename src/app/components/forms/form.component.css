@@ -1,0 +1,38 @@
+.form {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 640px);
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  grid-template-columns: 1fr;
+  justify-items: stretch;
+}
+
+.field-row {
+  width: 100%;
+  min-width: 280px;
+}
+
+:host ::ng-deep mat-form-field {
+  min-width: 300px;
+}
+
+.field-row app-text-field,
+.field-row app-password-field,
+.field-row mat-form-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.form-actions button {
+  width: auto;
+  min-width: 0;
+}
