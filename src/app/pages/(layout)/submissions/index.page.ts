@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -86,7 +86,7 @@ import './submissions.component.css';
         </mat-card>
       } @else {
         <div class="table-container">
-          <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="submissions-table">
+          <table mat-table [dataSource]="submissions()" matSort (matSortChange)="onSortChange($event)" [matSortActive]="sortBy()" [matSortDirection]="sortOrder()" class="submissions-table">
             <ng-container matColumnDef="formName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Form</th>
               <td mat-cell *matCellDef="let row">{{ row.form.name }}</td>
@@ -136,6 +136,8 @@ import './submissions.component.css';
   `
 })
 export default class SubmissionsPage implements OnInit, OnDestroy {
+  @ViewChild(MatSort) sort!: MatSort;
+  
   private formSubmissionService = inject(FormSubmissionService);
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
@@ -149,9 +151,8 @@ export default class SubmissionsPage implements OnInit, OnDestroy {
   pageSize = signal(10);
   currentPage = signal(0);
   sortBy = signal('createdAt');
-  sortOrder = signal('desc');
+  sortOrder = signal<'asc' | 'desc'>('desc');
 
-  dataSource: MatTableDataSource<FormSubmission> = new MatTableDataSource();
   displayedColumns = ['formName', 'articleTitle', 'data', 'createdAt', 'actions'];
 
   filterForm: FormGroup;
@@ -216,7 +217,6 @@ export default class SubmissionsPage implements OnInit, OnDestroy {
       next: (response: SubmissionsResponse) => {
         this.submissions.set(response.submissions);
         this.total.set(response.total);
-        this.dataSource.data = response.submissions;
         this.loading.set(false);
       },
       error: (error) => {
@@ -234,10 +234,12 @@ export default class SubmissionsPage implements OnInit, OnDestroy {
   }
 
   onSortChange(sort: Sort) {
-    this.sortBy.set(sort.active);
-    this.sortOrder.set(sort.direction === 'asc' ? 'asc' : 'desc');
-    this.currentPage.set(0);
-    this.loadSubmissions();
+    if (sort.direction) {
+      this.sortBy.set(sort.active);
+      this.sortOrder.set(sort.direction as 'asc' | 'desc');
+      this.currentPage.set(0);
+      this.loadSubmissions();
+    }
   }
 
   resetFilters() {
