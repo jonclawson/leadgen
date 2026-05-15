@@ -94,7 +94,7 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
   `,
   styles: [`
     .form-list-container {
-      padding: 24px;
+      padding: 14px;
       max-width: 1200px;
       margin: 0 auto;
     }

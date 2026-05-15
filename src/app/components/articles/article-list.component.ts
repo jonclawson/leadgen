@@ -97,7 +97,7 @@ import { authClient } from '../../../lib/auth-client';
   `,
   styles: [`
     .article-list-container {
-      padding: 24px;
+      padding: 14px;
       max-width: 1200px;
       margin: 0 auto;
     }

@@ -1,8 +1,18 @@
 @reference "../../styles.css";
 
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
 .site-header {
-  background-color: aliceblue;
-  @apply section px-4 py-2 flex items-center justify-between;
+  width: 100%;
+}
+
+.site-header__toolbar {
+  @apply section px-4 py-0 flex items-center justify-between;
 }
 
 .site-header__title {
@@ -25,11 +35,14 @@
 }
 
 .site-main {
-  @apply section px-4 py-8; 
+  width: 100%;
+  flex: 1;  
+  @apply section px-0 py-8; 
 }
 
 .site-footer {
+  background: var(--mat-toolbar-container-background-color, var(--mat-sys-surface));
+  width: 100%;
   text-align: center;
-  background-color: aliceblue;
   @apply section px-4 py-2;
 }

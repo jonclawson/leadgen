@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import AuthComponent from '../components/auth.component';
 import { authClient } from '../../lib/auth-client';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, AuthComponent, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, AuthComponent, MatButtonModule, MatIconModule, MatToolbarModule],
   styleUrls: ['./layout.css'],
   template: `
     <header class="site-header">
+      <mat-toolbar class="site-header__toolbar">
       <div class="site-header__title">My App</div>
       <nav class="site-nav">
         <a routerLink="/articles/list" routerLinkActive="active" mat-button>
@@ -32,6 +34,7 @@ import { authClient } from '../../lib/auth-client';
       <div class="site-header__auth">
         <app-auth></app-auth>
       </div>
+      </mat-toolbar>
     </header>
 
     <main class="site-main">
