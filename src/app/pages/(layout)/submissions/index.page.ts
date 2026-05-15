@@ -128,6 +128,7 @@ import './submissions.component.css';
             [pageSize]="pageSize()"
             [pageSizeOptions]="[5, 10, 25, 50]"
             showFirstLastButtons
+            [pageIndex]="currentPage()"
             (page)="onPageChange($event)">
           </mat-paginator>
         </div>
