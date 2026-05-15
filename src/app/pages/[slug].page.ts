@@ -19,13 +19,13 @@ export const routeMeta: RouteMeta = {
         <app-article-view [article]="articleData.article"></app-article-view>
       } @else {
         <div class="error-container">
-          <h1>Article Not Found</h1>
-          <p>The article you're looking for doesn't exist.</p>
+          <h1>Page Not Found</h1>
+          <p>The Page you're looking for doesn't exist.</p>
         </div>
       }
     } @else {
       <div class="loading-container">
-        <p>Loading article...</p>
+        <p>Loading...</p>
       </div>
     }
   `,

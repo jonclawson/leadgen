@@ -28,11 +28,11 @@ import { debounceTime } from 'rxjs/operators';
     MatSelectModule
   ],
   template: `
-    <div class="article-form-container">
+    <div class="article-form-container section">
       <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>{{ isEditMode ? 'Edit Article' : 'Create New Article' }}</mat-card-title>
+            <mat-card-title>{{ isEditMode ? 'Edit Page' : 'Create New Landing Page' }}</mat-card-title>
           </mat-card-header>
           
           <mat-card-content>
@@ -66,7 +66,7 @@ import { debounceTime } from 'rxjs/operators';
                         required
                         placeholder="Write your article in Markdown..."></textarea>
                       @if (articleForm.get('body')?.hasError('required') && articleForm.get('body')?.touched) {
-                        <mat-error>Article body is required</mat-error>
+                        <mat-error> body is required</mat-error>
                       }
                     </mat-form-field>
                   </div>
@@ -87,7 +87,7 @@ import { debounceTime } from 'rxjs/operators';
                     <mat-option [value]="form.id">{{ form.name }}</mat-option>
                   }
                 </mat-select>
-                <mat-hint>Select a form to display at the bottom of your article</mat-hint>
+                <mat-hint>Select a form to display at the bottom of your page</mat-hint>
               </mat-form-field>
             </div>
           </mat-card-content>
@@ -95,7 +95,7 @@ import { debounceTime } from 'rxjs/operators';
           <mat-card-actions>
             <button mat-raised-button color="primary" type="submit" [disabled]="!articleForm.valid || submitting()">
               <mat-icon>save</mat-icon>
-              {{ isEditMode ? 'Update' : 'Create' }} Article
+              {{ isEditMode ? 'Update' : 'Create' }} Page
             </button>
             <button mat-button type="button" (click)="onCancel()">
               Cancel
@@ -107,8 +107,6 @@ import { debounceTime } from 'rxjs/operators';
   `,
   styles: [`
     .article-form-container {
-      padding: 24px;
-      max-width: 1200px;
       margin: 0 auto;
     }
 

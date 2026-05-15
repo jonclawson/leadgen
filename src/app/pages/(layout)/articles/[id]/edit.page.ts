@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ArticleFormComponent],
   template: `
     @if (loading()) {
-      <div style="padding: 24px; text-align: center;">Loading article...</div>
+      <div style="padding: 24px; text-align: center;">Loading...</div>
     } @else if (article()) {
       <app-article-form
         [article]="article()!"
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
         (cancel)="onCancel()"
       ></app-article-form>
     } @else {
-      <div style="padding: 24px; text-align: center;">Article not found</div>
+      <div style="padding: 24px; text-align: center;">Page not found</div>
     }
   `,
 })

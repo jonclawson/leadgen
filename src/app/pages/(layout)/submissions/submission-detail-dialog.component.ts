@@ -28,9 +28,9 @@ import { FormSubmission } from '../../../services/form-submission.service';
         </div>
 
         <div class="detail-section">
-          <h3>Article Information</h3>
+          <h3>Page Information</h3>
           <div class="info-item">
-            <span class="label">Article Title:</span>
+            <span class="label">Page Title:</span>
             <span class="value">{{ data.article.title }}</span>
           </div>
         </div>

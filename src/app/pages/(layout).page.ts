@@ -14,20 +14,17 @@ import { authClient } from '../../lib/auth-client';
   template: `
     <header class="site-header">
       <mat-toolbar class="site-header__toolbar">
-      <div class="site-header__title">My App</div>
+      <div  class="site-header__title"><button routerLink="/">Leadgen</button></div>
       <nav class="site-nav">
         <a routerLink="/articles/list" routerLinkActive="active" mat-button>
-          <mat-icon>article</mat-icon>
-          Articles
+          Pages
         </a>
         @if (user()) {
           <a routerLink="/forms" routerLinkActive="active" mat-button>
-            <mat-icon>description</mat-icon>
-            Forms
+            Applications
           </a>
           <a routerLink="/submissions" routerLinkActive="active" mat-button>
-            <mat-icon>mail</mat-icon>
-            Submissions
+            Leads
           </a>
         }
       </nav>

@@ -25,23 +25,23 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
     MatTooltipModule
   ],
   template: `
-    <div class="form-list-container">
+    <div class="form-list-container section">
       <div class="header">
-        <h1>Dynamic Forms</h1>
+        <h1>Applications</h1>
         <button mat-raised-button color="primary" routerLink="/forms/new">
           <mat-icon>add</mat-icon>
-          Create New Form
+          Create New Application
         </button>
       </div>
 
       @if (loading()) {
-        <div class="loading">Loading forms...</div>
+        <div class="loading">Loading...</div>
       } @else if (forms().length === 0) {
         <mat-card class="empty-state">
           <mat-card-content>
             <mat-icon class="empty-icon">description</mat-icon>
             <h2>No Forms Yet</h2>
-            <p>Create your first dynamic form to get started.</p>
+            <p>Create your first application form to get started.</p>
             <button mat-raised-button color="primary" routerLink="/forms/new">
               Create Form
             </button>
@@ -94,8 +94,6 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
   `,
   styles: [`
     .form-list-container {
-      padding: 14px;
-      max-width: 1200px;
       margin: 0 auto;
     }
 

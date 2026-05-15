@@ -55,12 +55,12 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
           <mat-card-actions class="article-actions">
             <button mat-button routerLink="/articles/list">
               <mat-icon>arrow_back</mat-icon>
-              Back to Articles
+              Back to Dashboard
             </button>
             @if (canEdit()) {
               <button mat-raised-button color="primary" [routerLink]="['/articles', article.id, 'edit']">
                 <mat-icon>edit</mat-icon>
-                Edit Article
+                Edit Page
               </button>
             }
           </mat-card-actions>

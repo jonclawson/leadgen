@@ -9,7 +9,7 @@ import FormComponent, { FormField } from './forms/form.component';
   standalone: true,
   imports: [CommonModule, FormComponent],
   template: `
-    <div class="signin">
+    <div class="signin section">
       <h1>Sign In</h1>
       <p>Sign in to your account to access your dashboard and manage your projects.</p>
       <app-form [model]="signInModel" (submit)="onSubmit($event)"></app-form>
@@ -74,6 +74,6 @@ export default class SigninComponent implements OnInit {
 
     console.log('Signed in successfully', data);
     // Redirect to dashboard or home page after successful sign in
-    window.location.href = '/';
+    window.location.href = '/articles/list';
   }
 }

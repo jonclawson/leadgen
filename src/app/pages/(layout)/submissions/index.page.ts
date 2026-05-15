@@ -40,9 +40,9 @@ import './submissions.component.css';
     MatDialogModule
   ],
   template: `
-    <div class="submissions-container">
+    <div class="submissions-container section">
       <div class="header">
-        <h1>Form Submissions</h1>
+        <h1>Leads</h1>
       </div>
 
       <mat-card class="filters-card">
@@ -53,7 +53,7 @@ import './submissions.component.css';
           <form [formGroup]="filterForm" class="filters-form">
             <mat-form-field>
               <mat-label>Search</mat-label>
-              <input matInput formControlName="search" placeholder="Search by form or article name">
+              <input matInput formControlName="search" placeholder="Search by form or page name">
             </mat-form-field>
 
             <mat-form-field>
@@ -75,12 +75,12 @@ import './submissions.component.css';
       </mat-card>
 
       @if (loading()) {
-        <div class="loading">Loading submissions...</div>
+        <div class="loading">Loading...</div>
       } @else if (submissions().length === 0) {
         <mat-card class="empty-state">
           <mat-card-content>
             <mat-icon class="empty-icon">inbox</mat-icon>
-            <h2>No Submissions Yet</h2>
+            <h2>No Leads Yet</h2>
             <p>Submissions to your forms will appear here.</p>
           </mat-card-content>
         </mat-card>
@@ -93,7 +93,7 @@ import './submissions.component.css';
             </ng-container>
 
             <ng-container matColumnDef="articleTitle">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Article</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Page</th>
               <td mat-cell *matCellDef="let row">{{ row.article.title }}</td>
             </ng-container>
 

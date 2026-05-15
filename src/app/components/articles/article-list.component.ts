@@ -22,25 +22,25 @@ import { authClient } from '../../../lib/auth-client';
     MatTooltipModule
   ],
   template: `
-    <div class="article-list-container">
+    <div class="article-list-container section">
       <div class="header">
-        <h1>Articles</h1>
+        <h1>Landing Pages</h1>
         @if (currentUserId()) {
           <button mat-raised-button color="primary" routerLink="/articles/new">
             <mat-icon>add</mat-icon>
-            Create New Article
+            Create New Landing Page
           </button>
         }
       </div>
 
       @if (loading()) {
-        <div class="loading">Loading articles...</div>
+        <div class="loading">Loading...</div>
       } @else if (articles().length === 0) {
         <mat-card class="empty-state">
           <mat-card-content>
-            <mat-icon class="empty-icon">article</mat-icon>
-            <h2>No Articles Yet</h2>
-            <p>Be the first to create an article!</p>
+            <mat-icon class="empty-icon">page</mat-icon>
+            <h2>No landing pages Yet</h2>
+            <p>Be the first to create an landing page!</p>
             @if (currentUserId()) {
               <button mat-raised-button color="primary" routerLink="/articles/new">
                 Create Article
@@ -97,8 +97,6 @@ import { authClient } from '../../../lib/auth-client';
   `,
   styles: [`
     .article-list-container {
-      padding: 14px;
-      max-width: 1200px;
       margin: 0 auto;
     }
 
