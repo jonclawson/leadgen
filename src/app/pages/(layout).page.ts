@@ -39,7 +39,7 @@ import { authClient } from '../../lib/auth-client';
     </main>
 
     <footer class="site-footer">
-      © 2026 My App
+      © 2026 Leadgen. All rights reserved.
     </footer>
   `,
 })
