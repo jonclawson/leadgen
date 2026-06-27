@@ -1,0 +1,15 @@
+services:
+  web:
+    image: node:22-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"     # Map the port for your Analog dev server
+    volumes:
+      - .:/app          # Mount your whole local project directory into the container
+      - /app/node_modules # Bookmark node_modules so the container's npm packages don't overwrite your local ones
+    # Run the installation, prisma generation, and the dev server on boot
+    command: sh -c "npm install && npx prisma generate && npm run dev -- --host"
+    # command: sleep infinity
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
