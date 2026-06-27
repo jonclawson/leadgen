@@ -49,3 +49,5 @@ Thumbs.db
 /generated/prisma
 
 dev.db
+
+package-lock.json
