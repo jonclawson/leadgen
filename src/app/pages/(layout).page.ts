@@ -19,16 +19,13 @@ import { authClient } from '../../lib/auth-client';
         </div>
         <nav class="site-nav">
           <a routerLink="/articles/list" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <mat-icon>description</mat-icon>
             Pages
           </a>
           @if (user()) {
             <a routerLink="/forms" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-              <mat-icon>dynamic_form</mat-icon>
               Applications
             </a>
             <a routerLink="/submissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-              <mat-icon>people</mat-icon>
               Leads
             </a>
           }
