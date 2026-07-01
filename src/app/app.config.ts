@@ -10,12 +10,17 @@ import {
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideFileRouter, requestContextInterceptor } from '@analogjs/router';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_CARD_CONFIG } from '@angular/material/card';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' }
+    },
+    {
+      provide: MAT_CARD_CONFIG,
+      useValue: { appearance: 'outlined' }
     },
     provideBrowserGlobalErrorListeners(),
     provideFileRouter(),

@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+
+
 .submissions-container {
   margin: 0 auto;
 }
@@ -36,6 +39,8 @@
   flex-wrap: wrap;
   gap: 16px;
   align-items: flex-end;
+  @include mat.form-field-density(-4);
+  align-items: start;
 }
 
 .filters-form mat-form-field {
@@ -75,11 +80,7 @@
 }
 
 .table-container {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+
 }
 
 .submissions-table {

@@ -18,7 +18,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { FormSubmissionService, FormSubmission, SubmissionsResponse } from '../../../services/form-submission.service';
 import { SubmissionDetailDialogComponent } from './submission-detail-dialog.component';
-import './submissions.component.css';
+import './submissions.component.scss';
 
 @Component({
   selector: 'app-submissions',
@@ -45,11 +45,11 @@ import './submissions.component.css';
         <h1>Leads</h1>
       </div>
 
-      <mat-card class="filters-card">
-        <mat-card-header>
+      <div class="filters-card">
+        <div>
           <h2>Filters</h2>
-        </mat-card-header>
-        <mat-card-content>
+        </div>
+        <div>
           <form [formGroup]="filterForm" class="filters-form">
             <mat-form-field>
               <mat-label>Search</mat-label>
@@ -71,8 +71,8 @@ import './submissions.component.css';
               Reset
             </button>
           </form>
-        </mat-card-content>
-      </mat-card>
+        </div>
+      </div>
 
       @if (loading()) {
         <div class="loading">Loading...</div>
