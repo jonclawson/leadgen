@@ -1,110 +1,47 @@
 @use '@angular/material' as mat;
 
-// Custom color palette - Deep Indigo/Blue SaaS theme
-$leadgen-primary: mat.define-palette((
-  50: #eef2ff,
-  100: #dbe4ff,
-  200: #bac8ff,
-  300: #91a7ff,
-  400: #748ffc,
-  500: #1e3a5f,
-  600: #1a3253,
-  700: #162a47,
-  800: #12223b,
-  900: #0e1a2f,
-  A100: #bac8ff,
-  A200: #748ffc,
-  A400: #3b82f6,
-  A700: #1d4ed8,
-  contrast: (
-    50: #1e3a5f,
-    100: #1e3a5f,
-    200: #1e3a5f,
-    300: #1e3a5f,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #1e3a5f,
-    A200: #ffffff,
-    A400: #ffffff,
-    A700: #ffffff,
-  )
-));
+// Include prerequisite core styles once
+@include mat.core();
 
-$leadgen-accent: mat.define-palette((
-  50: #ecfdf5,
-  100: #d1fae5,
-  200: #a7f3d0,
-  300: #6ee7b7,
-  400: #34d399,
-  500: #059669,
-  600: #047857,
-  700: #065f46,
-  800: #064e3b,
-  900: #064e3b,
-  A100: #a7f3d0,
-  A200: #34d399,
-  A400: #059669,
-  A700: #047857,
-  contrast: (
-    50: #1e3a5f,
-    100: #1e3a5f,
-    200: #1e3a5f,
-    300: #1e3a5f,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #1e3a5f,
-    A200: #ffffff,
-    A400: #ffffff,
-    A700: #ffffff,
-  )
-));
+:root {
+  // 1. Initialize the modern Material 3 theme variables with default fallbacks
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: (
+      brand-family: 'Inter, Roboto, sans-serif',
+      plain-family: 'Inter, Roboto, sans-serif',
+    ),
+    density: 0
+  ));
 
-$leadgen-warn: mat.define-palette(mat.$red-palette);
+  // 2. Directly inject your custom deep indigo / emerald SaaS branding tokens
+  --mat-sys-primary: #1e3a5f;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #dbe4ff;
+  --mat-sys-on-primary-container: #1e3a5f;
+  
+  --mat-sys-tertiary: #059669;
+  --mat-sys-on-tertiary: #ffffff;
+}
 
-// Define a light theme
-$leadgen-theme: mat.define-light-theme((
-  color: (
-    primary: $leadgen-primary,
-    accent: $leadgen-accent,
-    warn: $leadgen-warn,
-  ),
-  typography: mat.define-typography-config(
-    $font-family: 'Inter, Roboto, "Helvetica Neue", sans-serif',
-  ),
-  density: 0,
-));
-
-// Apply theme
-@include mat.all-component-themes($leadgen-theme);
-
-// Custom button overrides for the SaaS look
-.mat-mdc-raised-button.mat-primary {
-  border-radius: 8px;
+// 3. Keep your custom layout & button shape overrides
+.mat-mdc-raised-button {
+  border-radius: 8px !important;
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 
-.mat-mdc-unelevated-button.mat-primary {
-  border-radius: 8px;
-}
-
-.mat-mdc-outlined-button {
-  border-radius: 8px;
-}
-
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
 .mat-mdc-stroked-button {
-  border-radius: 8px;
+  border-radius: 8px !important;
 }
 
-// Toolbar
 .mat-toolbar {
+  background-color: transparent !important;
   border-bottom: 1px solid #e5e7eb;
 }
