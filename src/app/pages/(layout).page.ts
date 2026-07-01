@@ -28,6 +28,9 @@ import { authClient } from '../../lib/auth-client';
             <a routerLink="/submissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
               Leads
             </a>
+            <a [routerLink]="['/user', user().id, 'subscription']" routerLinkActive="active">
+              Subscription
+            </a>
           }
         </nav>
         <div class="site-header__auth">

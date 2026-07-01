@@ -24,6 +24,7 @@ model User {
   dynamicForms      DynamicForm[]
   articles          Article[]
   formSubmissions   FormSubmission[]
+  subscription      Subscription?
 
   @@map("user")
 }
@@ -156,4 +157,15 @@ model FormSubmission {
   @@index([articleId])
   @@index([createdAt])
   @@map("form_submission")
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      String   @default("basic")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subscription")
 }

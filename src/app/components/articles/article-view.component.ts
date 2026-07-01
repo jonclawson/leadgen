@@ -70,6 +70,7 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
     @reference "../../../styles.css";
     .article-view-container {
       @apply section-outer;
+      height: 100vh;
     }
 
     .article-card {
@@ -103,6 +104,8 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
 
     .article-content {
       @apply section;
+      background-color: white;
+
     }
 
     .article-body {
@@ -220,6 +223,7 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
       justify-content: space-between;
       align-items: center;
       padding: 16px 24px;
+      @apply section-outer;
     }
 
     .article-form-section {
