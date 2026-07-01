@@ -63,12 +63,10 @@
 }
 
 .site-nav a:hover {
-  background: #f3f4f6;
   color: #1e3a5f;
 }
 
 .site-nav a.active {
-  background: #eef2ff;
   color: #1e3a5f;
   font-weight: 600;
 }
