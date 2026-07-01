@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, MatButtonModule],
   template: `
-    <button mat-raised-button
+    <button mat-flat-button
             type="submit"
             [color]="color()"
             [disabled]="disabled()">

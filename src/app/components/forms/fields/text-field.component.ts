@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
   ],
   template: `
-    <mat-form-field class="field">
+    <mat-form-field class="field" appearance="outline">
       <mat-label>{{ label() }}</mat-label>
       <input matInput 
         [type]="type()"

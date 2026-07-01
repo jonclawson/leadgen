@@ -1,5 +1,6 @@
 
-@import "tailwindcss";
+/* @import "tailwindcss"; */
+@reference "../../styles.css";
 
 .signup {
   @apply block min-h-screen bg-gray-50 p-4;
@@ -10,7 +11,7 @@
 }
 
 .signup__card {
-  @apply w-full max-w-md shadow-2xl;
+  @apply w-full max-w-md shadow;
   margin: 0 auto;
 }
 

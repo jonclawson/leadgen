@@ -26,7 +26,7 @@ import { authClient } from '../../../lib/auth-client';
       <div class="header">
         <h1>Landing Pages</h1>
         @if (currentUserId()) {
-          <button mat-raised-button color="primary" routerLink="/articles/new">
+          <button mat-flat-button color="primary" routerLink="/articles/new">
             <mat-icon>add</mat-icon>
             Create New Landing Page
           </button>
@@ -42,7 +42,7 @@ import { authClient } from '../../../lib/auth-client';
             <h2>No landing pages Yet</h2>
             <p>Be the first to create an landing page!</p>
             @if (currentUserId()) {
-              <button mat-raised-button color="primary" routerLink="/articles/new">
+              <button mat-flat-button color="primary" routerLink="/articles/new">
                 Create Article
               </button>
             }

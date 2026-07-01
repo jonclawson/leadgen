@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
   template: `
     @if (!user()) {
       <button mat-stroked-button routerLink="/signin">Sign In</button>
-      <button mat-raised-button color="primary" routerLink="/signup">Sign Up</button>
+      <button mat-flat-button color="primary" routerLink="/signup">Sign Up</button>
     } @else {
       <span class="auth-welcome">{{ user()?.name }}</span>
       <button mat-stroked-button routerLink="/signout">Sign Out</button>

@@ -3,24 +3,24 @@ import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
 import { authClient } from '../../lib/auth-client';
 import FormComponent, { FormField } from './forms/form.component';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'signin',
   standalone: true,
-  imports: [CommonModule, FormComponent],
+  imports: [CommonModule, FormComponent, MatCardModule],
   styles: [`
     .signin {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+
       background: #f9fafb;
       padding: 24px;
     }
 
     .signin-card {
       width: 100%;
-      max-width: 400px;
       background: white;
       border-radius: 12px;
       padding: 32px;
@@ -43,11 +43,11 @@ import FormComponent, { FormField } from './forms/form.component';
   `],
   template: `
     <div class="signin">
-      <div class="signin-card">
+      <mat-card class="signin-card" appearance="outlined">
         <h1>Sign In</h1>
         <p>Sign in to your account to access your dashboard.</p>
         <app-form [model]="signInModel" (submit)="onSubmit($event)"></app-form>
-      </div>
+      </mat-card>
     </div>
   `,
 })

@@ -120,7 +120,7 @@ import { MatCardModule } from '@angular/material/card';
         Create landing pages with drag-and-drop application forms to capture, manage, and grow your leads — all in one place.
       </p>
       <div class="hero-actions">
-        <a mat-raised-button color="primary" routerLink="/signup" size="large">Get Started Free</a>
+        <a mat-flat-button color="primary" routerLink="/signup" size="large">Get Started Free</a>
         <a mat-stroked-button routerLink="/articles/list">View Pages</a>
       </div>
     </div>

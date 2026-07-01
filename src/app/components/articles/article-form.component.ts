@@ -37,7 +37,7 @@ import { debounceTime } from 'rxjs/operators';
           
           <mat-card-content>
             <div class="form-fields">
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline" class="full-width" appearance="outline">
                 <mat-label>Title</mat-label>
                 <input matInput formControlName="title" required>
                 @if (articleForm.get('title')?.hasError('required') && articleForm.get('title')?.touched) {
@@ -93,7 +93,7 @@ import { debounceTime } from 'rxjs/operators';
           </mat-card-content>
 
           <mat-card-actions>
-            <button mat-raised-button color="primary" type="submit" [disabled]="!articleForm.valid || submitting()">
+            <button mat-flat-button color="primary" type="submit" [disabled]="!articleForm.valid || submitting()">
               <mat-icon>save</mat-icon>
               {{ isEditMode ? 'Update' : 'Create' }} Page
             </button>

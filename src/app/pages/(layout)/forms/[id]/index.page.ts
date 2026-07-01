@@ -35,7 +35,7 @@ import FormComponent, { convertFormFieldDefinition } from '../../../../component
             <mat-icon class="error-icon">error</mat-icon>
             <h2>Error Loading Form</h2>
             <p>{{ error() }}</p>
-            <button mat-raised-button color="primary" routerLink="/forms">
+            <button mat-flat-button color="primary" routerLink="/forms">
               Back to Forms
             </button>
           </mat-card-content>

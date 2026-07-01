@@ -26,7 +26,7 @@ import { authClient } from '../../lib/auth-client';
   styleUrls: ['./signup.component.css'],
   template: `
     <div class="signup__container">
-      <mat-card class="signup__card">
+      <mat-card class="signup__card" appearance="outlined">
         <mat-card-header class="signup__header">
           <div class="signup__header-wrapper">
             <mat-card-title class="signup__title">
@@ -42,7 +42,7 @@ import { authClient } from '../../lib/auth-client';
           <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup__form">
             <!-- Name Fields Row -->
             <div class="signup__name-fields">
-              <mat-form-field  class="signup__field-group">
+              <mat-form-field  class="signup__field-group" appearance="outline">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstName" required 
                        class="signup__input">
@@ -52,7 +52,7 @@ import { authClient } from '../../lib/auth-client';
                 }
               </mat-form-field>
 
-              <mat-form-field  class="signup__field-group">
+              <mat-form-field  class="signup__field-group" appearance="outline">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastName" required 
                        class="signup__input">
@@ -62,7 +62,7 @@ import { authClient } from '../../lib/auth-client';
               </mat-form-field>
             </div>
 
-            <mat-form-field  class="signup__field-group">
+            <mat-form-field  class="signup__field-group" appearance="outline">
               <mat-label>Email Address</mat-label>
               <input matInput type="email" formControlName="email" required 
                      class="signup__input" placeholder="you@example.com">
@@ -75,7 +75,7 @@ import { authClient } from '../../lib/auth-client';
               }
             </mat-form-field>
 
-            <mat-form-field  class="signup__field-group">
+            <mat-form-field  class="signup__field-group" appearance="outline">
               <mat-label>Password</mat-label>
               <input matInput [type]="hidePassword ? 'password' : 'text'" 
                      formControlName="password" 
@@ -98,7 +98,7 @@ import { authClient } from '../../lib/auth-client';
               }
             </mat-form-field>
 
-            <mat-form-field  class="signup__field-group">
+            <mat-form-field  class="signup__field-group" appearance="outline">
               <mat-label>Confirm Password</mat-label>
               <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" 
                      formControlName="confirmPassword" required class="signup__input" 
@@ -137,7 +137,7 @@ import { authClient } from '../../lib/auth-client';
             }
 
             <!-- Submit Button -->
-            <button mat-raised-button color="primary" type="submit" 
+            <button mat-flat-button color="primary" type="submit" 
                     [disabled]="signupForm.invalid || isLoading"
                     class="signup__submit-btn">
               @if (isLoading) {

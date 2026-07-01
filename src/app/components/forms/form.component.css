@@ -14,8 +14,8 @@
   min-width: 280px;
 }
 
-:host ::ng-deep mat-form-field {
-  min-width: 300px;
+:host ::ng-deep .field-row  mat-form-field {
+  min-width: 400px;
 }
 
 .field-row app-text-field,

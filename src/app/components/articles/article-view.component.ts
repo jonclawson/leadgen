@@ -26,66 +26,63 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
   template: `
     <div class="article-view-container">
       @if (article) {
-        <mat-card class="article-card">
-          <mat-card-header class="article-header">
-            <div class="article-header-content">
-              <mat-card-title class="article-title">{{ article.title }}</mat-card-title>
-              <mat-card-subtitle class="article-meta">
-                <!-- <span>By {{ article.author.name || article.author.email }}</span> -->
-                <span class="separator">•</span>
-                <span>{{ formatDate(article.createdAt) }}</span>
-              </mat-card-subtitle>
+       <div class="article-card">
+        <div class="article-header">
+          <div class="article-header-content">
+            <div class="article-title">{{ article.title }}</div>
+            <div class="article-meta">
+              <span>{{ formatDate(article.createdAt) }}</span>
             </div>
-          </mat-card-header>
+          </div>
+        </div>
 
-          <mat-card-content class="article-content">
-            <div class="article-body markdown-content" [innerHTML]="renderedBody()"></div>
-            
-            @if (formFields().length > 0) {
-              <div class="article-form-section">
-                <h3 class="form-section-title">{{ article.form?.name }}</h3>
-                <app-form 
-                  [model]="getFormFieldsWithLoadingState()" 
-                  (submit)="onFormSubmit($event)">
-                </app-form>
-              </div>
-            }
-          </mat-card-content>
+        <div class="article-content">
+          <div class="article-body markdown-content" [innerHTML]="renderedBody()"></div>
+          
+          @if (formFields().length > 0) {
+            <div class="article-form-section">
+              <h3 class="form-section-title">{{ article.form?.name }}</h3>
+              <app-form 
+                [model]="getFormFieldsWithLoadingState()" 
+                (submit)="onFormSubmit($event)">
+              </app-form>
+            </div>
+          }
+        </div>
 
-          <mat-card-actions class="article-actions">
-            <button mat-button routerLink="/articles/list">
-              <mat-icon>arrow_back</mat-icon>
-              Back to Dashboard
+        <div class="article-actions">
+          <button mat-button routerLink="/articles/list">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Dashboard
+          </button>
+          @if (canEdit()) {
+            <button mat-flat-button color="primary" [routerLink]="['/articles', article.id, 'edit']">
+              <mat-icon>edit</mat-icon>
+              Edit Page
             </button>
-            @if (canEdit()) {
-              <button mat-raised-button color="primary" [routerLink]="['/articles', article.id, 'edit']">
-                <mat-icon>edit</mat-icon>
-                Edit Page
-              </button>
-            }
-          </mat-card-actions>
-        </mat-card>
+          }
+        </div>
+      </div>
       }
     </div>
   `,
   styles: [`
+    @reference "../../../styles.css";
     .article-view-container {
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
+      @apply section-outer;
     }
 
     .article-card {
-      margin-bottom: 24px;
+
     }
 
     .article-header {
-      padding: 24px 24px 16px;
+      @apply section;
       border-bottom: 1px solid #e0e0e0;
     }
 
     .article-header-content {
-      width: 100%;
+      @apply section-inner;
     }
 
     .article-title {
@@ -103,15 +100,13 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
       gap: 8px;
     }
 
-    .separator {
-      color: #ccc;
-    }
 
     .article-content {
-      padding: 32px 24px;
+      @apply section;
     }
 
     .article-body {
+      @apply section-inner;
       line-height: 1.8;
       font-size: 16px;
       color: #333;
@@ -199,7 +194,6 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
 
     .markdown-content :deep(hr) {
       border: none;
-      border-top: 1px solid #e0e0e0;
       margin: 2em 0;
     }
 
@@ -226,13 +220,10 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
       justify-content: space-between;
       align-items: center;
       padding: 16px 24px;
-      border-top: 1px solid #e0e0e0;
     }
 
     .article-form-section {
-      margin-top: 48px;
-      padding-top: 32px;
-      border-top: 2px solid #e0e0e0;
+
     }
 
     .form-section-title {

@@ -56,7 +56,7 @@ import FieldEditorDialogComponent from './field-editor-dialog.component';
             </mat-form-field>
 
             <div class="step-actions">
-              <button mat-raised-button color="primary" matStepperNext>
+              <button mat-flat-button color="primary" matStepperNext>
                 Next
                 <mat-icon>arrow_forward</mat-icon>
               </button>
@@ -70,7 +70,7 @@ import FieldEditorDialogComponent from './field-editor-dialog.component';
           <div class="step-content">
             <div class="fields-header">
               <h3>Form Fields ({{ fields()?.length }})</h3>
-              <button mat-raised-button color="primary" (click)="addField()">
+              <button mat-flat-button color="primary" (click)="addField()">
                 <mat-icon>add</mat-icon>
                 Add Field
               </button>
@@ -122,7 +122,7 @@ import FieldEditorDialogComponent from './field-editor-dialog.component';
                 <mat-icon>arrow_back</mat-icon>
                 Back
               </button>
-              <button mat-raised-button color="primary" matStepperNext [disabled]="fields().length === 0">
+              <button mat-flat-button color="primary" matStepperNext [disabled]="fields().length === 0">
                 Next
                 <mat-icon>arrow_forward</mat-icon>
               </button>
@@ -156,7 +156,7 @@ import FieldEditorDialogComponent from './field-editor-dialog.component';
                 <mat-icon>arrow_back</mat-icon>
                 Back
               </button>
-              <button mat-raised-button color="primary" (click)="saveForm()" [disabled]="saving()">
+              <button mat-flat-button color="primary" (click)="saveForm()" [disabled]="saving()">
                 @if (saving()) {
                   <span>Saving...</span>
                 } @else {

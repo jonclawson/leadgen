@@ -190,7 +190,7 @@ interface ValidatorOption {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="cancel()">Cancel</button>
-      <button mat-raised-button color="primary" (click)="save()" 
+      <button mat-flat-button color="primary" (click)="save()" 
         [disabled]="fieldForm.invalid">
         {{ data.field ? 'Update' : 'Add' }} Field
       </button>

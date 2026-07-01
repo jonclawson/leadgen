@@ -28,7 +28,7 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
     <div class="form-list-container section">
       <div class="header">
         <h1>Applications</h1>
-        <button mat-raised-button color="primary" routerLink="/forms/new">
+        <button mat-flat-button color="primary" routerLink="/forms/new">
           <mat-icon>add</mat-icon>
           Create New Application
         </button>
@@ -42,7 +42,7 @@ import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-
             <mat-icon class="empty-icon">description</mat-icon>
             <h2>No Forms Yet</h2>
             <p>Create your first application form to get started.</p>
-            <button mat-raised-button color="primary" routerLink="/forms/new">
+            <button mat-flat-button color="primary" routerLink="/forms/new">
               Create Form
             </button>
           </mat-card-content>
