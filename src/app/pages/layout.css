@@ -9,40 +9,99 @@
 
 .site-header {
   width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .site-header__toolbar {
-  @apply section px-4 py-0 flex items-center justify-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .site-header__title {
-  font-size: 1.5em;
-  font-weight: bold;
-  display: flex flex-start;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  letter-spacing: -0.01em;
+}
+
+.site-header__title button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .site-nav {
-  @apply flex gap-2 items-center;
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
 
 .site-nav a {
-  @apply flex items-center gap-1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.15s ease;
+}
+
+.site-nav a:hover {
+  background: #f3f4f6;
+  color: #1e3a5f;
+}
+
+.site-nav a.active {
+  background: #eef2ff;
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+.site-nav a mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .site-header__auth {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-header__auth app-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .site-main {
   width: 100%;
-  flex: 1;  
-  @apply section px-0 py-8; 
+  flex: 1;
+  padding: 32px 0;
 }
 
 .site-footer {
-  background: var(--mat-toolbar-container-background-color, var(--mat-sys-surface));
   width: 100%;
   text-align: center;
-  @apply section px-4 py-2;
+  padding: 24px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #9ca3af;
+  font-size: 0.8125rem;
 }

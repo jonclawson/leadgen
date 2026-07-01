@@ -2,22 +2,31 @@ import { Component, OnInit, signal } from '@angular/core';
 import { authClient } from '../../lib/auth-client';
 import { RouterModule } from '@angular/router';
 import { JsonPipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-auth',
   template: `
     @if (!user()) {
-      <button routerLink="/signin">Sign In</button>
-      <button routerLink="/signup">Sign Up</button>
+      <button mat-stroked-button routerLink="/signin">Sign In</button>
+      <button mat-raised-button color="primary" routerLink="/signup">Sign Up</button>
     } @else {
-      Welcome {{ user()?.name }}!
-      <button routerLink="/signout">Sign out</button>
+      <span class="auth-welcome">{{ user()?.name }}</span>
+      <button mat-stroked-button routerLink="/signout">Sign Out</button>
     }
   `,
   imports: [
         RouterModule,
         JsonPipe,
-  ]
+        MatButtonModule,
+  ],
+  styles: [`
+    .auth-welcome {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-right: 8px;
+    }
+  `]
 })
 export default class AuthComponent implements OnInit {
   public user = signal<any | null>(null);

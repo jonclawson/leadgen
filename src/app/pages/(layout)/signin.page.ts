@@ -3,12 +3,20 @@ import SigninComponent from "../../components/signin.component";
 
 @Component({
   selector: 'signin-page',
-  template: `<signin></signin>`,
+  template: `
+    <div class="signin-page-wrapper">
+      <signin></signin>
+    </div>
+  `,
   imports: [
     SigninComponent
-  ]
+  ],
+  styles: [`
+    .signin-page-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+  `]
 })
-export default class SigninPage {
-
-
-}
+export default class SigninPage {}

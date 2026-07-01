@@ -13,25 +13,30 @@ import { authClient } from '../../lib/auth-client';
   styleUrls: ['./layout.css'],
   template: `
     <header class="site-header">
-      <mat-toolbar class="site-header__toolbar">
-      <div  class="site-header__title"><button routerLink="/">Leadgen</button></div>
-      <nav class="site-nav">
-        <a routerLink="/articles/list" routerLinkActive="active" mat-button>
-          Pages
-        </a>
-        @if (user()) {
-          <a routerLink="/forms" routerLinkActive="active" mat-button>
-            Applications
+      <div class="site-header__toolbar">
+        <div class="site-header__title">
+          <button routerLink="/">Leadgen</button>
+        </div>
+        <nav class="site-nav">
+          <a routerLink="/articles/list" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon>description</mat-icon>
+            Pages
           </a>
-          <a routerLink="/submissions" routerLinkActive="active" mat-button>
-            Leads
-          </a>
-        }
-      </nav>
-      <div class="site-header__auth">
-        <app-auth></app-auth>
+          @if (user()) {
+            <a routerLink="/forms" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <mat-icon>dynamic_form</mat-icon>
+              Applications
+            </a>
+            <a routerLink="/submissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <mat-icon>people</mat-icon>
+              Leads
+            </a>
+          }
+        </nav>
+        <div class="site-header__auth">
+          <app-auth></app-auth>
+        </div>
       </div>
-      </mat-toolbar>
     </header>
 
     <main class="site-main">
@@ -39,7 +44,7 @@ import { authClient } from '../../lib/auth-client';
     </main>
 
     <footer class="site-footer">
-      © 2026 Leadgen. All rights reserved.
+      &copy; 2026 Leadgen. All rights reserved.
     </footer>
   `,
 })
