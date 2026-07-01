@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import './theme.scss';
+/* @import './theme.scss'; */
+@import "@angular/material/prebuilt-themes/azure-blue.css";
 @import 'tailwindcss';
 
 :root {
