@@ -17,8 +17,19 @@
     ),
     density: 0
   ));
+  @include mat.select-overrides((
+    panel-background-color: var(--mat-sys-surface-container-high), 
+    enabled-trigger-text-color: var(--mat-sys-primary),
+    placeholder-text-color: var(--mat-sys-outline)
+  ));
+  @include mat.option-overrides((
+    hover-state-layer-color: var(--mat-sys-primary),
+    focus-state-layer-color: var(--mat-sys-secondary),
+    label-text-color: var(--mat-sys-on-surface),
+  ));
 
   // 2. Directly inject your custom deep indigo / emerald SaaS branding tokens
+  --mat-sys-surface-container-high: white;
   // --mat-sys-primary: #1e3a5f;
   // --mat-sys-on-primary: #ffffff;
   // --mat-sys-primary-container: #dbe4ff;
