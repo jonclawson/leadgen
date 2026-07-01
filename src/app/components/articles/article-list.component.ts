@@ -145,13 +145,30 @@ import { authClient } from '../../../lib/auth-client';
 
     .table-container {
       background: white;
-      border-radius: 8px;
+      border-radius: 0.5rem;
       overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
     }
 
     .articles-table {
       width: 100%;
+    }
+
+    .articles-table ::ng-deep th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #111827;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .articles-table ::ng-deep tr {
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.15s ease;
+    }
+
+    .articles-table ::ng-deep tr:hover {
+      background-color: #f9fafb;
     }
 
     .excerpt {

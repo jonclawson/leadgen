@@ -8,11 +8,46 @@ import FormComponent, { FormField } from './forms/form.component';
   selector: 'signin',
   standalone: true,
   imports: [CommonModule, FormComponent],
+  styles: [`
+    .signin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f9fafb;
+      padding: 24px;
+    }
+
+    .signin-card {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e7eb;
+    }
+
+    .signin-card h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #111827;
+    }
+
+    .signin-card p {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      margin: 0 0 24px;
+    }
+  `],
   template: `
-    <div class="signin section">
-      <h1>Sign In</h1>
-      <p>Sign in to your account to access your dashboard and manage your projects.</p>
-      <app-form [model]="signInModel" (submit)="onSubmit($event)"></app-form>
+    <div class="signin">
+      <div class="signin-card">
+        <h1>Sign In</h1>
+        <p>Sign in to your account to access your dashboard.</p>
+        <app-form [model]="signInModel" (submit)="onSubmit($event)"></app-form>
+      </div>
     </div>
   `,
 })

@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 .signup {
-  @apply block min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4;
+  @apply block min-h-screen bg-gray-50 p-4;
 }
 
 .signup__container {

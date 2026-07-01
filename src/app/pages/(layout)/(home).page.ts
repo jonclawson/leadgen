@@ -8,8 +8,6 @@ import { MatCardModule } from '@angular/material/card';
   selector: 'app-home',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatCardModule],
   styles: `
-    @reference "../../../styles.css";
-
     .hero {
       text-align: center;
       padding: 80px 24px 64px;
@@ -130,7 +128,7 @@ import { MatCardModule } from '@angular/material/card';
     <div class="features">
       <div class="feature-card">
         <div class="feature-icon blue">
-          <mat-icon>widgets</mat-icon>
+          <mat-icon>layers</mat-icon>
         </div>
         <h3>Drag & Drop Builder</h3>
         <p>Build custom application forms visually. Add text fields, selects, checkboxes and more with simple drag and drop.</p>
@@ -138,7 +136,7 @@ import { MatCardModule } from '@angular/material/card';
 
       <div class="feature-card">
         <div class="feature-icon green">
-          <mat-icon>smart_toy</mat-icon>
+          <mat-icon>task_alt</mat-icon>
         </div>
         <h3>Smart Forms</h3>
         <p>Embed dynamic forms on any landing page. Collect validated data with real-time error checking and conditional logic.</p>
@@ -146,7 +144,7 @@ import { MatCardModule } from '@angular/material/card';
 
       <div class="feature-card">
         <div class="feature-icon purple">
-          <mat-icon>trending_up</mat-icon>
+          <mat-icon>manage_search</mat-icon>
         </div>
         <h3>Lead Tracking</h3>
         <p>View, search, and export all submissions in one place. Filter by date, form, or page to analyze your conversion funnel.</p>

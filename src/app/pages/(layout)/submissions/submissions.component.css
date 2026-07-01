@@ -79,10 +79,26 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
 }
 
 .submissions-table {
   width: 100%;
+}
+
+.submissions-table ::ng-deep th {
+  background: #f9fafb;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.submissions-table ::ng-deep tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.15s ease;
+}
+
+.submissions-table ::ng-deep tbody tr:hover {
+  background-color: #f9fafb;
 }
 
 .table-row {

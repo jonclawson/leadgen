@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import './theme.scss';
 @import 'tailwindcss';
 
 :root {
@@ -76,52 +75,91 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ======== Tailwind Utilities ======== */
+/* ======== Shared SaaS Component Styles ======== */
 
-@utility section-outer {
+.section {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.section-outer {
   display: block;
   width: 100%;
-  @apply odd:bg-gray-100/50;
 }
 
-@utility section {
-  @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-10;
-}
-
-@utility section-inner {
-  @apply py-6;
+.section-inner {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 /* Shared SaaS card style */
-@utility saas-card {
-  @apply bg-white rounded-xl border border-gray-200 shadow-sm;
+.saas-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Shared table wrapper */
-@utility saas-table-container {
-  @apply bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden;
+/* Shared table styles */
+.saas-table-container {
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.saas-table {
+  width: 100%;
+}
+
+.saas-table-header {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.saas-table-row {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.15s ease;
+}
+
+.saas-table-row:hover {
+  background-color: #f9fafb;
 }
 
 /* Empty state */
-@utility saas-empty {
-  @apply text-center py-16 px-8;
+.saas-empty {
+  text-align: center;
+  padding: 4rem 2rem;
 }
 
-@utility saas-empty-icon {
-  @apply text-gray-300 text-6xl w-16 h-16 mx-auto mb-4;
+.saas-empty-icon {
+  color: #d1d5db;
+  font-size: 3rem;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
 }
 
 /* Page header */
-@utility saas-page-header {
-  @apply flex items-center justify-between mb-8;
-}
-
-/* Data table header */
-@utility saas-table-header {
-  @apply bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-500;
+.saas-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 /* Filters card */
-@utility saas-filters-card {
-  @apply bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6;
+.saas-filters-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
