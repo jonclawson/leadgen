@@ -56,3 +56,15 @@
   background-color: transparent !important;
   border-bottom: 1px solid #e5e7eb;
 }
+
+input.mat-mdc-input-element:-webkit-autofill,
+input.mat-mdc-input-element:-webkit-autofill:hover,
+input.mat-mdc-input-element:-webkit-autofill:focus,
+input.mat-mdc-input-element:-webkit-autofill:active {
+  // Use a transition to make the background color transparent
+  // or use a box-shadow to override the color with your desired color
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  
+  // If you want to change the text color during autofill
+  -webkit-text-fill-color: var(--mat-sys-on-surface) !important;
+}
