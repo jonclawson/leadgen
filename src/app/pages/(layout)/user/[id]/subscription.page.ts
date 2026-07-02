@@ -282,10 +282,20 @@ export default class SubscriptionPage {
 
   onPaymentSuccess() {
     this.showPayment.set(false);
-    this.subscribed.set(true);
-    this.status.set('active');
-    this.snackBar.open('Subscription activated successfully!', 'Close', { duration: 5000 });
-    this.fetchSubscriptionStatus(); // Refresh to be safe
+    
+    // Confirm subscription is active in the database
+    this.http.post<{ success: boolean, subscription: any }>('/api/v1/stripe/confirm-subscription-active', {}).subscribe({
+      next: (res) => {
+        this.subscribed.set(true);
+        this.status.set('active');
+        this.snackBar.open('Subscription activated successfully!', 'Close', { duration: 5000 });
+        this.fetchSubscriptionStatus(); // Refresh to be safe
+      },
+      error: (err) => {
+        this.snackBar.open('Payment successful, but could not confirm subscription. Refreshing...', 'Close', { duration: 5000 });
+        this.fetchSubscriptionStatus(); // Try to get actual status from server
+      }
+    });
   }
 
   onPaymentError(error: string) {
