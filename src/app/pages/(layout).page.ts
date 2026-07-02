@@ -15,7 +15,7 @@ import { authClient } from '../../lib/auth-client';
     <header class="site-header">
       <div class="site-header__toolbar">
         <div class="site-header__title">
-          <button routerLink="/">Leadgen</button>
+          <button routerLink="/"><img src="/logo.png" alt="Leadgen" /></button>
         </div>
         <nav class="site-nav">
           <a routerLink="/articles/list" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
