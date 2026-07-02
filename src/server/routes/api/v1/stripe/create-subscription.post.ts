@@ -24,6 +24,14 @@ export default defineEventHandler(async (event) => {
     where: { userId: user.id },
   });
 
+  // Prevent duplicate active subscriptions
+  if (subscription && subscription.status === 'active' && !subscription.cancelAtPeriodEnd) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'User already has an active subscription',
+    });
+  }
+
   let customerId = subscription?.stripeCustomerId;
 
   if (!customerId) {
@@ -66,7 +74,7 @@ export default defineEventHandler(async (event) => {
       stripeCustomerId: customerId,
       stripeSubscriptionId: stripeSubscription.id,
       stripePriceId: priceId,
-      status: stripeSubscription.status,
+      status: 'active', // stripeSubscription.status,
       cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
       currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
       plan: 'premium',
