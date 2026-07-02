@@ -8,8 +8,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { authClient } from '../../../../../lib/auth-client';
-import { map, of } from 'rxjs';
+import { map } from 'rxjs';
+import { PaymentComponent } from '../../../../components/payment.component';
 
 @Component({
   selector: 'app-subscription-page',
@@ -20,7 +22,9 @@ import { map, of } from 'rxjs';
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    PaymentComponent
   ],
   template: `
     <div class="subscription-container section">
@@ -51,15 +55,38 @@ import { map, of } from 'rxjs';
               
               <div class="toggle-container">
                 <mat-checkbox 
-                  [checked]="subscribed()" 
-                  (change)="toggleSubscription($event.checked)"
+                  [checked]="isActive()" 
+                  (change)="handleToggle($event.checked)"
+                  [disabled]="performingStripeAction()"
                   color="primary">
                   Activate Public Subscription
                 </mat-checkbox>
               </div>
 
-              <div class="status-badge" [class.active]="subscribed()">
-                Status: {{ subscribed() ? 'Active (Public)' : 'Inactive (Private)' }}
+              @if (showPayment() && clientSecret()) {
+                <app-payment 
+                  [clientSecret]="clientSecret()!" 
+                  (paymentSuccess)="onPaymentSuccess()"
+                  (paymentError)="onPaymentError($event)">
+                </app-payment>
+              }
+
+              <div class="status-container">
+                <div class="status-badge" [class.active]="isActive()">
+                  Status: {{ statusText() }}
+                </div>
+
+                @if (subscribed() && status() === 'active') {
+                   @if (cancelAtPeriodEnd()) {
+                    <button mat-button color="primary" (click)="reactivateSubscription()" [disabled]="performingStripeAction()">
+                      Reactivate Subscription
+                    </button>
+                   } @else {
+                    <button mat-button color="warn" (click)="cancelSubscription()" [disabled]="performingStripeAction()">
+                      Cancel Subscription
+                    </button>
+                   }
+                }
               </div>
             </div>
           }
@@ -87,6 +114,12 @@ import { map, of } from 'rxjs';
     .toggle-container {
       margin: 24px 0;
     }
+    .status-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+    }
     .status-badge {
       display: inline-block;
       padding: 8px 16px;
@@ -110,18 +143,42 @@ import { map, of } from 'rxjs';
 export default class SubscriptionPage {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
   
   userId = toSignal(this.route.params.pipe(map(p => p['id'])));
   session = signal<any>(null);
   
   loading = signal(false);
+  performingStripeAction = signal(false);
   error = signal<string | null>(null);
+  
   subscribed = signal(false);
+  isActive = signal(false);
+  status = signal<string | null>(null);
+  cancelAtPeriodEnd = signal(false);
+  currentPeriodEnd = signal<string | null>(null);
+  showPayment = signal(false);
+  clientSecret = signal<string | null>(null);
 
   isCurrentUser = () => {
     const session = this.session();
     const routeId = this.userId();
     return session?.user?.id === routeId;
+  };
+
+  statusText = () => {
+    if (!this.subscribed()) return 'Inactive (Private)';
+    if (this.status() === 'active') {
+      if (this.cancelAtPeriodEnd()) {
+        const date = this.currentPeriodEnd() ? new Date(this.currentPeriodEnd()!).toLocaleDateString() : 'soon';
+        return `Active (Canceled - expires on ${date})`;
+      }
+      return 'Active (Public)';
+    }
+    if (this.status() === 'canceled' || !this.isActive()) {
+      return 'Inactive (Payment Expired/Private)';
+    }
+    return `Status: ${this.status()}`;
   };
 
   constructor() {
@@ -136,9 +193,13 @@ export default class SubscriptionPage {
 
   async fetchSubscriptionStatus() {
     this.loading.set(true);
-    this.http.get<{ subscribed: boolean }>('/api/v1/subscription').subscribe({
+    this.http.get<{ subscribed: boolean, isActive: boolean, subscription: any }>('/api/v1/subscription').subscribe({
       next: (res) => {
         this.subscribed.set(res.subscribed);
+        this.isActive.set(res.isActive);
+        this.status.set(res.subscription?.status || null);
+        this.cancelAtPeriodEnd.set(res.subscription?.cancelAtPeriodEnd || false);
+        this.currentPeriodEnd.set(res.subscription?.currentPeriodEnd || null);
         this.loading.set(false);
       },
       error: (err) => {
@@ -148,17 +209,86 @@ export default class SubscriptionPage {
     });
   }
 
-  toggleSubscription(subscribe: boolean) {
-    this.loading.set(true);
-    this.http.post<{ subscribed: boolean }>('/api/v1/subscription', { subscribe }).subscribe({
+  handleToggle(checked: boolean) {
+    if (checked) {
+      if (this.subscribed() && this.status() === 'active') {
+        if (this.cancelAtPeriodEnd()) {
+          this.reactivateSubscription();
+        }
+        return;
+      }
+      this.initiateCheckout();
+    } else {
+      if (this.subscribed() && this.status() === 'active' && !this.cancelAtPeriodEnd()) {
+        this.cancelSubscription();
+      } else {
+        this.showPayment.set(false);
+        // If they uncheck while it's "Canceled but active", we might want to do nothing or keep it checked
+        // Since it's still active, we'll keep it checked in the UI logic via [checked]="subscribed()"
+      }
+    }
+  }
+
+  initiateCheckout() {
+    this.performingStripeAction.set(true);
+    this.http.post<{ clientSecret: string }>('/api/v1/stripe/create-subscription', {}).subscribe({
       next: (res) => {
-        this.subscribed.set(res.subscribed);
-        this.loading.set(false);
+        this.clientSecret.set(res.clientSecret);
+        this.showPayment.set(true);
+        this.performingStripeAction.set(false);
       },
       error: (err) => {
-        this.error.set('Could not update subscription.');
-        this.loading.set(false);
+        this.snackBar.open('Error initializing payment. Please try again.', 'Close', { duration: 5000 });
+        this.performingStripeAction.set(false);
       }
     });
+  }
+
+  cancelSubscription() {
+    if (!confirm('Are you sure you want to cancel your subscription?')) return;
+
+    this.performingStripeAction.set(true);
+    this.http.post<{ status: string, cancelAtPeriodEnd: boolean, currentPeriodEnd: string }>('/api/v1/stripe/cancel-subscription', {}).subscribe({
+      next: (res) => {
+        this.status.set(res.status);
+        this.cancelAtPeriodEnd.set(true);
+        this.snackBar.open('Subscription canceled. It will remain active until the end of the period.', 'Close', { duration: 5000 });
+        this.performingStripeAction.set(false);
+        this.fetchSubscriptionStatus();
+      },
+      error: (err) => {
+        this.snackBar.open('Error canceling subscription.', 'Close', { duration: 5000 });
+        this.performingStripeAction.set(false);
+      }
+    });
+  }
+
+  reactivateSubscription() {
+    this.performingStripeAction.set(true);
+    this.http.post<{ status: string, cancelAtPeriodEnd: boolean }>('/api/v1/stripe/reactivate-subscription', {}).subscribe({
+      next: (res) => {
+        this.status.set(res.status);
+        this.cancelAtPeriodEnd.set(false);
+        this.snackBar.open('Subscription reactivated successfully!', 'Close', { duration: 5000 });
+        this.performingStripeAction.set(false);
+        this.fetchSubscriptionStatus();
+      },
+      error: (err) => {
+        this.snackBar.open('Error reactivating subscription.', 'Close', { duration: 5000 });
+        this.performingStripeAction.set(false);
+      }
+    });
+  }
+
+  onPaymentSuccess() {
+    this.showPayment.set(false);
+    this.subscribed.set(true);
+    this.status.set('active');
+    this.snackBar.open('Subscription activated successfully!', 'Close', { duration: 5000 });
+    this.fetchSubscriptionStatus(); // Refresh to be safe
+  }
+
+  onPaymentError(error: string) {
+    this.snackBar.open(error, 'Close', { duration: 5000 });
   }
 }

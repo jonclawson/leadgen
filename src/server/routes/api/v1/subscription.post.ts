@@ -20,18 +20,16 @@ export default defineEventHandler(async (event) => {
   const userId = session.user.id;
 
   if (subscribe) {
-    // Create subscription if it doesn't exist
-    const subscription = await prisma.subscription.upsert({
-      where: { userId },
-      update: {},
-      create: { 
-        userId,
-        plan: 'premium' // Default plan for now
-      }
+    // This route is deprecated for creating new premium subscriptions.
+    // Use /api/v1/stripe/create-subscription instead to get a client secret.
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Subscriptions must be created through Stripe integration',
     });
-    return { subscribed: true, subscription };
   } else {
-    // Remove subscription
+    // For now, if they want to unsubscribe (make private), we might still allow deleting the record
+    // but ideally we should cancel the Stripe subscription if it exists.
+    // I'll leave the deleteMany for now but the UI will likely use the new cancel route.
     await prisma.subscription.deleteMany({
       where: { userId }
     });

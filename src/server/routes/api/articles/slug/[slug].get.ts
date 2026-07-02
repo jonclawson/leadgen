@@ -1,6 +1,7 @@
 import { defineEventHandler, getRouterParam, createError } from 'h3';
 import { prisma } from '../../../../../lib/prisma';
 import { auth } from '../../../../utils/auth';
+import { isSubscriptionActive } from '../../../../utils/subscription';
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug');
@@ -50,11 +51,11 @@ export default defineEventHandler(async (event) => {
   }
 
   // Visibility check:
-  // If author is not subscribed, only the author can see it.
-  const isAuthorSubscribed = !!article.user.subscription;
+  // If author is not active, only the author can see it.
+  const isAuthorActive = isSubscriptionActive(article.user.subscription);
   const isCurrentUserAuthor = currentUserId === article.user.id;
 
-  if (!isAuthorSubscribed && !isCurrentUserAuthor) {
+  if (!isAuthorActive && !isCurrentUserAuthor) {
     throw createError({
       statusCode: 404, // Use 404 to hide existence
       message: 'Article not found'

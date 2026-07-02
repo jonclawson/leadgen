@@ -1,6 +1,7 @@
 import { defineEventHandler } from 'h3';
 import { prisma } from '../../../../lib/prisma';
 import { auth } from '../../../utils/auth';
+import { isSubscriptionActive } from '../../../utils/subscription';
 
 export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({
@@ -23,12 +24,12 @@ export default defineEventHandler(async (event) => {
     orderBy: { createdAt: 'desc' }
   });
 
-  // Filter: publicly visible if author has subscription, 
+  // Filter: publicly visible if author has active subscription, 
   // OR if the current user is the author.
   const visibleArticles = articles.filter((article: any) => {
-    const isAuthorSubscribed = !!article.user.subscription;
+    const isAuthorActive = isSubscriptionActive(article.user.subscription);
     const isCurrentUserAuthor = currentUserId === article.user.id;
-    return isAuthorSubscribed || isCurrentUserAuthor;
+    return isAuthorActive || isCurrentUserAuthor;
   });
 
   return {
