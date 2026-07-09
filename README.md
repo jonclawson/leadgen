@@ -11,6 +11,7 @@ Leadgen is a fullstack application built with [Analog](https://analogjs.org), th
 - **Attach Forms to Pages** — Associate any form with a landing page to embed it directly below your content for seamless lead collection.
 - **Lead Management Dashboard** — View, search, filter by date range, sort, and paginate through all collected leads. Quickly inspect submission data and delete unwanted entries.
 - **Authentication** — Sign up and sign in with email/password (powered by Better Auth). Users manage their own pages, forms, and leads.
+- **Stripe subscriptions** - Users must subscribe to make their landing pages visible. 
 
 ## Tech Stack
 

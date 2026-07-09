@@ -145,7 +145,7 @@ interface ValidatorOption {
                     @if (validator.hasParam && selectedValidators().includes(validator.value)) {
                       <mat-form-field appearance="outline" class="param-input">
                         <mat-label>Value</mat-label>
-                        <input matInput type="number" 
+                        <input matInput type="text" 
                           [value]="getValidatorParam(validator.value)"
                           (input)="updateValidatorParam(validator.value, $any($event.target).value)">
                       </mat-form-field>
