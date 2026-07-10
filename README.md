@@ -19,7 +19,7 @@ Leadgen is a fullstack application built with [Analog](https://analogjs.org), th
 - **Backend:** Analog.js server routes, Prisma ORM
 - **Database:** SQLite (via Better SQLite3 adapter)
 - **Auth:** Better Auth
-- **Markdown:** `marked` with syntax highlighting via `prismjs`
+- **HTML Editor:** `tiptap`
 
 ## Setup
 
