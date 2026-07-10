@@ -1,11 +1,13 @@
 import { defineEventHandler, getRouterParam, readBody, createError } from 'h3';
 import { requireAuth } from '../../../utils/require-auth';
 import { prisma } from '../../../../lib/prisma';
+import { deleteFile } from '../../../utils/file-upload';
 
 interface UpdateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  image_url?: string | null;
   formId?: string | null;
 }
 
@@ -88,12 +90,18 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  // Delete old image if it changed or was removed
+  if (body.image_url !== undefined && body.image_url !== existingArticle.image_url) {
+    await deleteFile(existingArticle.image_url);
+  }
+
   const article = await prisma.article.update({
     where: { id },
     data: {
       title: body.title,
       slug: body.slug,
       body: body.body,
+      image_url: body.image_url !== undefined ? body.image_url : existingArticle.image_url,
       formId: body.formId !== undefined ? body.formId : existingArticle.formId
     },
     include: {

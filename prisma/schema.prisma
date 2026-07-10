@@ -125,6 +125,7 @@ model Article {
   id          String              @id @default(cuid())
   title       String
   slug        String              @unique
+  image_url   String?
   body        String
   userId      String
   user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)

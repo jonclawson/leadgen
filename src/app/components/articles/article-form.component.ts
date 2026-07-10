@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, signal, computed, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -8,8 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Article } from '../../services/article.service';
 import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-form.service';
+import { UploadService } from '../../services/upload.service';
 import { marked } from 'marked';
 import { debounceTime } from 'rxjs/operators';
 
@@ -25,7 +28,9 @@ import { debounceTime } from 'rxjs/operators';
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   template: `
     <div class="article-form-container section">
@@ -53,6 +58,60 @@ import { debounceTime } from 'rxjs/operators';
                   <mat-error>Slug is required</mat-error>
                 }
               </mat-form-field>
+
+              <!-- Image Upload Section -->
+              <div class="image-upload-section">
+                <div class="image-upload-header">
+                  <h3>Featured Image (Optional)</h3>
+                </div>
+                
+                <div class="image-upload-area">
+                  @if (!previewUrl()) {
+                    <div class="upload-placeholder">
+                      <button 
+                        mat-stroked-button 
+                        type="button" 
+                        (click)="fileInput.click()"
+                        [disabled]="uploadingImage()">
+                        <mat-icon>image</mat-icon>
+                        Choose Image
+                      </button>
+                      <p>Supported formats: JPEG, PNG, WebP, GIF</p>
+                      <p>Max size: 5MB</p>
+                    </div>
+                  } @else {
+                    <div class="image-preview-container">
+                      <img [src]="previewUrl()" alt="Article preview" class="image-preview">
+                      <div class="image-preview-actions">
+                        <button 
+                          mat-icon-button 
+                          type="button" 
+                          (click)="fileInput.click()"
+                          [disabled]="uploadingImage()"
+                          matTooltip="Change image">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button 
+                          mat-icon-button 
+                          type="button" 
+                          (click)="removeImage()"
+                          [disabled]="uploadingImage()"
+                          matTooltip="Remove image">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+                
+                <input 
+                  #fileInput 
+                  type="file" 
+                  accept="image/*" 
+                  (change)="onImageSelected($event)"
+                  [disabled]="uploadingImage()"
+                  hidden>
+              </div>
 
               <mat-tab-group class="full-width">
                 <mat-tab label="Editor">
@@ -204,19 +263,106 @@ import { debounceTime } from 'rxjs/operators';
       gap: 8px;
       padding: 16px;
     }
+
+    .image-upload-section {
+      margin: 24px 0;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      background: #fafafa;
+    }
+
+    .image-upload-header {
+      margin-bottom: 16px;
+    }
+
+    .image-upload-header h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .image-upload-area {
+      width: 100%;
+    }
+
+    .upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      text-align: center;
+      background: white;
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .upload-placeholder p {
+      margin: 8px 0;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .image-preview-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 4px;
+      background: white;
+      border: 1px solid #e0e0e0;
+    }
+
+    .image-preview-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 4px;
+      padding: 4px;
+    }
+
+    .image-preview-actions button {
+      color: white;
+    }
+
+    .image-preview-actions button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
   `]
 })
 export class ArticleFormComponent implements OnInit {
   @Input() article?: Article;
-  @Output() save = new EventEmitter<{ title: string; slug: string; body: string; formId?: string | null }>();
+  @Output() save = new EventEmitter<{ title: string; slug: string; body: string; image_url?: string | null; formId?: string | null }>();
   @Output() cancel = new EventEmitter<void>();
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   private fb = inject(FormBuilder);
   private formService = inject(DynamicFormService);
+  private uploadService = inject(UploadService);
+  private snackBar = inject(MatSnackBar);
   
   articleForm!: FormGroup;
   submitting = signal(false);
   availableForms = signal<DynamicFormListItem[]>([]);
+  
+  // Image-related signals
+  selectedImage = signal<File | null>(null);
+  previewUrl = signal<string | null>(null);
+  imageUrl = signal<string | null>(null);
+  uploadingImage = signal(false);
   
   markdownPreview = computed(() => {
     const body = this.articleForm?.get('body')?.value || '';
@@ -238,6 +384,12 @@ export class ArticleFormComponent implements OnInit {
       body: [this.article?.body || '', [Validators.required]],
       formId: [this.article?.formId || null]
     });
+
+    // Initialize image URL if editing
+    if (this.isEditMode && this.article?.image_url) {
+      this.imageUrl.set(this.article.image_url);
+      this.previewUrl.set(this.article.image_url);
+    }
 
     // Load available forms
     this.formService.getForms().subscribe({
@@ -282,15 +434,84 @@ export class ArticleFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.articleForm.valid && !this.submitting()) {
+    if (this.articleForm.valid && !this.submitting() && !this.uploadingImage()) {
       this.submitting.set(true);
-      const formValue = this.articleForm.value;
-      this.save.emit({
-        title: formValue.title,
-        slug: formValue.slug,
-        body: formValue.body,
-        formId: formValue.formId
-      });
+      
+      // If there's a selected image, upload it first
+      if (this.selectedImage()) {
+        this.uploadingImage.set(true);
+        this.uploadService.uploadFile(this.selectedImage()!).subscribe({
+          next: (response) => {
+            this.uploadingImage.set(false);
+            this.imageUrl.set(response.fileUrl);
+            this.emitSave();
+          },
+          error: (error) => {
+            this.uploadingImage.set(false);
+            this.submitting.set(false);
+            const errorMessage = error?.error?.message || 'Failed to upload image';
+            this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
+            console.error('Image upload error:', error);
+          }
+        });
+      } else {
+        this.emitSave();
+      }
+    }
+  }
+
+  private emitSave() {
+    const formValue = this.articleForm.value;
+    this.save.emit({
+      title: formValue.title,
+      slug: formValue.slug,
+      body: formValue.body,
+      image_url: this.imageUrl(),
+      formId: formValue.formId
+    });
+    this.submitting.set(false);
+  }
+
+  onImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    
+    if (files && files.length > 0) {
+      const file = files[0];
+      
+      // Validate file
+      if (file.size > 5 * 1024 * 1024) {
+        this.snackBar.open('File size exceeds 5MB limit', 'Close', { duration: 5000 });
+        return;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        this.snackBar.open('Please select a valid image file', 'Close', { duration: 5000 });
+        return;
+      }
+      
+      this.selectedImage.set(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUrl.set(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    // Reset input
+    input.value = '';
+  }
+
+  removeImage() {
+    this.selectedImage.set(null);
+    this.previewUrl.set(null);
+    if (!this.isEditMode) {
+      this.imageUrl.set(null);
+    }
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
     }
   }
 

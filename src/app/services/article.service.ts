@@ -13,6 +13,7 @@ export interface ArticleListItem {
   title: string;
   slug: string;
   body: string; // excerpt
+  image_url?: string | null;
   author: ArticleAuthor;
   formId?: string | null;
   createdAt: Date;
@@ -24,6 +25,7 @@ export interface Article {
   title: string;
   slug: string;
   body: string;
+  image_url?: string | null;
   userId: string;
   author: ArticleAuthor;
   formId?: string | null;
@@ -52,6 +54,7 @@ export interface CreateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  image_url?: string | null;
   formId?: string | null;
 }
 
@@ -59,6 +62,7 @@ export interface UpdateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  image_url?: string | null;
   formId?: string | null;
 }
 

@@ -6,6 +6,7 @@ interface CreateArticleRequest {
   title: string;
   slug: string;
   body: string;
+  image_url?: string | null;
   formId?: string | null;
 }
 
@@ -70,6 +71,7 @@ export default defineEventHandler(async (event) => {
       title: body.title,
       slug: slug,
       body: body.body,
+      image_url: body.image_url || null,
       userId: session.user.id,
       formId: body.formId || null
     },

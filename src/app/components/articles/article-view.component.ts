@@ -29,9 +29,18 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
        <div class="article-card">
         <div class="article-header">
           <div class="article-header-content">
-            <div class="article-title">{{ article.title }}</div>
-            <div class="article-meta">
-              <span>{{ formatDate(article.createdAt) }}</span>
+            <div class="article-header-wrapper">
+              @if (article.image_url) {
+                <div class="article-image-container">
+                  <img [src]="article.image_url" [alt]="article.title" class="article-image">
+                </div>
+              }
+              <div class="article-header-text">
+                <div class="article-title">{{ article.title }}</div>
+                <div class="article-meta">
+                  <span>{{ formatDate(article.createdAt) }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -84,6 +93,29 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
 
     .article-header-content {
       @apply section-inner;
+    }
+
+    .article-header-wrapper {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .article-image-container {
+      flex-shrink: 0;
+    }
+
+    .article-image {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-header-text {
+      min-width: 0;
     }
 
     .article-title {
@@ -235,6 +267,22 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
       font-weight: 500;
       margin-bottom: 24px;
       color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .article-header-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .article-image {
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+      }
+
+      .article-title {
+        font-size: 28px;
+      }
     }
   `]
 })
