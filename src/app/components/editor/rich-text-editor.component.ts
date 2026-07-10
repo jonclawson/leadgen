@@ -422,9 +422,7 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
     this.editor = new Editor({
       element: this.editorContainer.nativeElement,
       extensions: [
-        StarterKit.configure({
-          codeBlock: false
-        }),
+        StarterKit,
         Table.configure({ resizable: true }),
         TableRow,
         TableHeader,
