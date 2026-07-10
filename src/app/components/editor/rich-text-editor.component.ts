@@ -194,10 +194,10 @@ import Superscript from '@tiptap/extension-superscript';
             ↷
           </button>
         </div>
+        <!-- Editor -->
+        <div #editorContainer class="editor-wrapper"></div>
       </div>
 
-      <!-- Editor -->
-      <div #editorContainer class="editor-wrapper"></div>
   `,
   styles: [`
     .rich-text-editor-container {
