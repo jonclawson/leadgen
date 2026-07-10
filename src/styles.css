@@ -127,4 +127,140 @@ input:-webkit-autofill:active {
   @apply bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6;
 }
 
+/* ======== Rich Content Styling (ProseMirror & rendered HTML) ======== */
+
+.ProseMirror,
+.prose-content {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+.ProseMirror p,
+.prose-content p {
+  margin: 1rem 0;
+}
+
+.ProseMirror h1,
+.prose-content h1 {
+  font-size: 2em;
+  margin: 1.5rem 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ProseMirror h2,
+.prose-content h2 {
+  font-size: 1.5em;
+  margin: 1.25rem 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ProseMirror h3,
+.prose-content h3 {
+  font-size: 1.17em;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ProseMirror ul,
+.prose-content ul,
+.ProseMirror ol,
+.prose-content ol {
+  padding-left: 2rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror li,
+.prose-content li {
+  margin: 0.5rem 0;
+}
+
+.ProseMirror code,
+.prose-content code {
+  background: #f3f4f6;
+  color: #dc2626;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  border: 1px solid #e5e7eb;
+}
+
+.ProseMirror pre,
+.prose-content pre {
+  background: #1f2937;
+  color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  border: 1px solid #111827;
+  line-height: 1.6;
+}
+
+.ProseMirror pre code,
+.prose-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border: none;
+}
+
+.ProseMirror blockquote,
+.prose-content blockquote {
+  border-left: 4px solid #3b82f6;
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0;
+  background: #eff6ff;
+  color: #1e40af;
+  font-style: italic;
+  border-radius: 0.25rem;
+}
+
+.ProseMirror blockquote p,
+.prose-content blockquote p {
+  margin: 0;
+}
+
+.ProseMirror hr,
+.prose-content hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+.ProseMirror table,
+.prose-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.ProseMirror th,
+.ProseMirror td,
+.prose-content th,
+.prose-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.ProseMirror th,
+.prose-content th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.ProseMirror tr:hover,
+.prose-content tr:hover {
+  background: #f9fafb;
+}
+
+
 

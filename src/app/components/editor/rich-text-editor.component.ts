@@ -239,111 +239,11 @@ import Superscript from '@tiptap/extension-superscript';
 
     :deep(.ProseMirror) {
       outline: none;
-      font-family: inherit;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #1f2937;
     }
 
     :deep(.ProseMirror:focus) {
       outline: 2px solid #3b82f6;
       outline-offset: 2px;
-    }
-
-    :deep(.ProseMirror p) {
-      margin: 1rem 0;
-    }
-
-    :deep(.ProseMirror h1) {
-      font-size: 2em;
-      margin: 1rem 0 0.5rem 0;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    :deep(.ProseMirror h2) {
-      font-size: 1.5em;
-      margin: 1rem 0 0.5rem 0;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    :deep(.ProseMirror h3) {
-      font-size: 1.17em;
-      margin: 1rem 0 0.5rem 0;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    :deep(.ProseMirror ul),
-    :deep(.ProseMirror ol) {
-      padding-left: 2rem;
-      margin: 1rem 0;
-    }
-
-    :deep(.ProseMirror li) {
-      margin: 0.5rem 0;
-    }
-
-    :deep(.ProseMirror code) {
-      background: #f3f4f6;
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.25rem;
-      font-family: monospace;
-      font-size: 0.9em;
-    }
-
-    :deep(.ProseMirror pre) {
-      background: #1f2937;
-      color: #f3f4f6;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-      font-family: monospace;
-      font-size: 0.9em;
-    }
-
-    :deep(.ProseMirror pre code) {
-      background: none;
-      color: inherit;
-      padding: 0;
-    }
-
-    :deep(.ProseMirror blockquote) {
-      border-left: 3px solid #3b82f6;
-      padding-left: 1rem;
-      margin: 1rem 0;
-      color: #6b7280;
-      font-style: italic;
-    }
-
-    :deep(.ProseMirror hr) {
-      border: none;
-      border-top: 1px solid #e5e7eb;
-      margin: 2rem 0;
-    }
-
-    :deep(.ProseMirror table) {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 1rem 0;
-    }
-
-    :deep(.ProseMirror th),
-    :deep(.ProseMirror td) {
-      border: 1px solid #e5e7eb;
-      padding: 0.5rem;
-      text-align: left;
-    }
-
-    :deep(.ProseMirror th) {
-      background: #f9fafb;
-      font-weight: 600;
-    }
-
-    :deep(.ProseMirror tr:hover) {
-      background: #f9fafb;
     }
 
     .bubble-menu {

@@ -45,7 +45,7 @@ import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/f
         </div>
 
         <div class="article-content">
-          <div class="article-body markdown-content" [innerHTML]="renderedBody()"></div>
+          <div class="article-body prose-content" [innerHTML]="renderedBody()"></div>
           
           @if (formFields().length > 0) {
             <div class="article-form-section">
