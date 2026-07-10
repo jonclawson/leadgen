@@ -262,5 +262,13 @@ input:-webkit-autofill:active {
   background: #f9fafb;
 }
 
+.prose-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 
 

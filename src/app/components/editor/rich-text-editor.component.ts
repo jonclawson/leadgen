@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import {Table, TableRow, TableHeader, TableCell} from '@tiptap/extension-table';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
@@ -178,6 +179,17 @@ import Superscript from '@tiptap/extension-superscript';
 
           <div class="menu-divider"></div>
 
+          <!-- Image -->
+          <button
+            type="button"
+            (click)="insertImageFromFile()"
+            title="Insert Image"
+            class="menu-button">
+            🖼️
+          </button>
+
+          <div class="menu-divider"></div>
+
           <!-- Undo/Redo -->
           <button
             type="button"
@@ -198,6 +210,14 @@ import Superscript from '@tiptap/extension-superscript';
         </div>
         <!-- Editor -->
         <div #editorContainer class="editor-wrapper"></div>
+
+        <!-- Hidden file input -->
+        <input 
+          #imageInput 
+          type="file" 
+          accept="image/*" 
+          style="display: none"
+          (change)="onImageSelected($event)">
       </div>
 
   `,
@@ -291,6 +311,23 @@ import Superscript from '@tiptap/extension-superscript';
       background: #e5e7eb;
       margin: 0 0.25rem;
     }
+
+    :deep(.editor-image) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    :deep(.ProseMirror img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
   `]
 })
 export class RichTextEditorComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
@@ -299,6 +336,7 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
   @Output() contentChange = new EventEmitter<string>();
 
   @ViewChild('editorContainer') editorContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('imageInput') imageInput!: ElementRef<HTMLInputElement>;
 
   editor: Editor | null = null;
 
@@ -326,6 +364,12 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
       element: this.editorContainer.nativeElement,
       extensions: [
         StarterKit,
+        Image.configure({
+          allowBase64: true,
+          HTMLAttributes: {
+            class: 'editor-image',
+          },
+        }),
         Table.configure({ resizable: true }),
         TableRow,
         TableHeader,
@@ -351,6 +395,20 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
         this.onTouched();
       }
     });
+
+    // Add event listeners for paste and drop
+    setTimeout(() => {
+      const editorElement = this.editorContainer.nativeElement.querySelector('.ProseMirror');
+      if (editorElement) {
+        editorElement.addEventListener('paste', (e: Event) => this.handlePaste(e as ClipboardEvent));
+        editorElement.addEventListener('drop', (e: Event) => this.handleDrop(e as DragEvent));
+        editorElement.addEventListener('dragover', (e: Event) => {
+          const dragEvent = e as DragEvent;
+          dragEvent.preventDefault();
+          dragEvent.dataTransfer!.dropEffect = 'copy';
+        });
+      }
+    }, 0);
   }
 
   // ControlValueAccessor implementation
@@ -426,6 +484,63 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
 
   insertTable() {
     this.editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  }
+
+  insertImageFromFile() {
+    this.imageInput.nativeElement.click();
+  }
+
+  onImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    
+    if (files && files.length > 0) {
+      const file = files[0];
+      this.convertImageToBase64(file);
+    }
+    
+    input.value = '';
+  }
+
+  private convertImageToBase64(file: File) {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      const base64String = e.target?.result as string;
+      this.editor?.chain().focus().setImage({ src: base64String }).run();
+    };
+    
+    reader.readAsDataURL(file);
+  }
+
+  private handlePaste(event: ClipboardEvent) {
+    const items = event.clipboardData?.items;
+    
+    if (!items) return;
+    
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        event.preventDefault();
+        const file = items[i].getAsFile();
+        if (file) {
+          this.convertImageToBase64(file);
+        }
+      }
+    }
+  }
+
+  private handleDrop(event: DragEvent) {
+    event.preventDefault();
+    
+    const files = event.dataTransfer?.files;
+    
+    if (!files) return;
+    
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.indexOf('image') !== -1) {
+        this.convertImageToBase64(files[i]);
+      }
+    }
   }
 
   undo() {
