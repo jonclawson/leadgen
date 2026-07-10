@@ -6,14 +6,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Article } from '../../services/article.service';
 import { DynamicFormService, DynamicFormListItem } from '../../services/dynamic-form.service';
 import { UploadService } from '../../services/upload.service';
-import { marked } from 'marked';
+import { RichTextEditorComponent } from '../editor/rich-text-editor.component';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -27,10 +26,10 @@ import { debounceTime } from 'rxjs/operators';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RichTextEditorComponent
   ],
   template: `
     <div class="article-form-container section">
@@ -113,30 +112,17 @@ import { debounceTime } from 'rxjs/operators';
                   hidden>
               </div>
 
-              <mat-tab-group class="full-width">
-                <mat-tab label="Editor">
-                  <div class="tab-content">
-                    <mat-form-field appearance="outline" class="full-width">
-                      <mat-label>Body (Markdown)</mat-label>
-                      <textarea 
-                        matInput 
-                        formControlName="body" 
-                        rows="20" 
-                        required
-                        placeholder="Write your article in Markdown..."></textarea>
-                      @if (articleForm.get('body')?.hasError('required') && articleForm.get('body')?.touched) {
-                        <mat-error> body is required</mat-error>
-                      }
-                    </mat-form-field>
-                  </div>
-                </mat-tab>
-                
-                <mat-tab label="Preview">
-                  <div class="tab-content preview-content">
-                    <div class="markdown-preview" [innerHTML]="markdownPreview()"></div>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
+              <div class="body-editor-section">
+                <label class="editor-label">Body</label>
+                <app-rich-text-editor 
+                  [content]="articleForm.get('body')?.value || ''"
+                  (contentChange)="updateBodyContent($event)"
+                  placeholder="Write your article using the editor...">
+                </app-rich-text-editor>
+                @if (articleForm.get('body')?.hasError('required') && articleForm.get('body')?.touched) {
+                  <div class="editor-error">Body is required</div>
+                }
+              </div>
 
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Optional Form</mat-label>
@@ -177,85 +163,22 @@ import { debounceTime } from 'rxjs/operators';
       width: 100%;
     }
 
-    .tab-content {
-      padding: 16px 0;
-      min-height: 400px;
+    .body-editor-section {
+      margin: 24px 0;
     }
 
-    .preview-content {
-      background: #f5f5f5;
-      padding: 24px;
-      border-radius: 4px;
+    .editor-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
     }
 
-    .markdown-preview {
-      background: white;
-      padding: 24px;
-      border-radius: 4px;
-      min-height: 350px;
-      line-height: 1.6;
-    }
-
-    .markdown-preview :deep(h1) {
-      font-size: 2em;
-      margin: 0.67em 0;
-      font-weight: bold;
-    }
-
-    .markdown-preview :deep(h2) {
-      font-size: 1.5em;
-      margin: 0.75em 0;
-      font-weight: bold;
-    }
-
-    .markdown-preview :deep(h3) {
-      font-size: 1.17em;
-      margin: 0.83em 0;
-      font-weight: bold;
-    }
-
-    .markdown-preview :deep(p) {
-      margin: 1em 0;
-    }
-
-    .markdown-preview :deep(code) {
-      background: #f4f4f4;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: monospace;
-    }
-
-    .markdown-preview :deep(pre) {
-      background: #f4f4f4;
-      padding: 16px;
-      border-radius: 4px;
-      overflow-x: auto;
-    }
-
-    .markdown-preview :deep(pre code) {
-      background: none;
-      padding: 0;
-    }
-
-    .markdown-preview :deep(blockquote) {
-      border-left: 4px solid #ddd;
-      padding-left: 16px;
-      margin-left: 0;
-      color: #666;
-    }
-
-    .markdown-preview :deep(ul), 
-    .markdown-preview :deep(ol) {
-      padding-left: 2em;
-    }
-
-    .markdown-preview :deep(a) {
-      color: #1976d2;
-      text-decoration: none;
-    }
-
-    .markdown-preview :deep(a:hover) {
-      text-decoration: underline;
+    .editor-error {
+      color: #d32f2f;
+      font-size: 12px;
+      margin-top: 4px;
     }
 
     mat-card-actions {
@@ -363,15 +286,6 @@ export class ArticleFormComponent implements OnInit {
   previewUrl = signal<string | null>(null);
   imageUrl = signal<string | null>(null);
   uploadingImage = signal(false);
-  
-  markdownPreview = computed(() => {
-    const body = this.articleForm?.get('body')?.value || '';
-    try {
-      return marked.parse(body) as string;
-    } catch (e) {
-      return '<p>Error rendering markdown preview</p>';
-    }
-  });
 
   get isEditMode(): boolean {
     return !!this.article;
@@ -470,6 +384,10 @@ export class ArticleFormComponent implements OnInit {
       formId: formValue.formId
     });
     this.submitting.set(false);
+  }
+
+  updateBodyContent(html: string) {
+    this.articleForm.patchValue({ body: html });
   }
 
   onImageSelected(event: Event) {

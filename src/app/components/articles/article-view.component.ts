@@ -8,7 +8,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Article } from '../../services/article.service';
 import { FormSubmissionService } from '../../services/form-submission.service';
 import { authClient } from '../../../lib/auth-client';
-import { marked } from 'marked';
 import FormComponent, { FormField, convertFormFieldDefinition } from '../forms/form.component';
 
 @Component({
@@ -321,13 +320,8 @@ export class ArticleViewComponent implements OnInit {
 
   renderedBody = () => {
     console.log('Rendering article body:', this.article.body);
-    if (!this.article?.body) return 'no content';
-    try {
-      return marked.parse(this.article.body) as string;
-    } catch (e) {
-      console.error('Error rendering markdown:', e);
-      return '<p>Error rendering article content</p>';
-    }
+    if (!this.article?.body) return '<p>No content</p>';
+    return this.article.body;
   };
 
   canEdit(): boolean {
