@@ -6,7 +6,7 @@ Leadgen is a fullstack application built with [Analog](https://analogjs.org), th
 
 ## Features
 
-- **Landing Pages** — Write and publish Markdown-based landing pages with rich content (headings, code blocks, tables, images, blockquotes, and more).
+- **Landing Pages** — Write and publish HTML-Editor-based landing pages with rich content (headings, code blocks, tables, images, blockquotes, and more).
 - **Drag-and-Drop Form Builder** — Visually design custom lead capture forms using a multi-step builder. Add, edit, reorder, and delete fields including text, password, textarea, select, checkbox, radio, and submit button. Supports validators (required, email, min/max length, pattern).
 - **Attach Forms to Pages** — Associate any form with a landing page to embed it directly below your content for seamless lead collection.
 - **Lead Management Dashboard** — View, search, filter by date range, sort, and paginate through all collected leads. Quickly inspect submission data and delete unwanted entries.
