@@ -8,7 +8,9 @@ import {
   forwardRef,
   ViewChild,
   ElementRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -302,6 +304,7 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
+  private cdr = inject(ChangeDetectorRef);
 
   ngAfterViewInit() {
     this.initializeEditor();
@@ -340,6 +343,9 @@ export class RichTextEditorComponent implements AfterViewInit, ControlValueAcces
         const html = editor.getHTML();
         this.contentChange.emit(html);
         this.onChange(html);
+      },
+      onSelectionUpdate: () => {
+        this.cdr.markForCheck();
       },
       onBlur: () => {
         this.onTouched();
