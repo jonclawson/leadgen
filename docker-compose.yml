@@ -1,20 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: leadgen
-      POSTGRES_PASSWORD: leadgen
-      POSTGRES_DB: leadgen
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U leadgen -d leadgen"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   web:
     image: node:22-alpine
     working_dir: /app
@@ -27,11 +11,5 @@ services:
     command: sh -c "npm install && npx prisma generate && npx prisma migrate dev --name init && npm run dev -- --host"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://leadgen:leadgen@db:5432/leadgen
-    depends_on:
-      db:
-        condition: service_healthy
+      - DATABASE_URL=file:./prisma/dev.db
     restart: unless-stopped
-
-volumes:
-  pgdata:
