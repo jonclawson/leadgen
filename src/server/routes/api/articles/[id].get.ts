@@ -1,7 +1,8 @@
 import { defineEventHandler, getRouterParam, createError } from 'h3';
-import { prisma } from '../../../../lib/prisma';
+import { getPrisma } from '../../../../lib/prisma';
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const id = getRouterParam(event, 'id');
 
   if (!id) {

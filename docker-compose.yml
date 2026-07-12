@@ -7,9 +7,10 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    # tty: true
-    command: sh -c "npm install && npx prisma generate && npx prisma migrate dev --name init && npm run dev -- --host"
+    tty: true
+    # command: sh -c "npm install && npx prisma generate && npx prisma migrate dev --name init && npm run dev -- --host"
     environment:
       - NODE_ENV=development
       - DATABASE_URL=file:./prisma/dev.db
+      - NODE_OPTIONS=--max-old-space-size=4096
     restart: unless-stopped

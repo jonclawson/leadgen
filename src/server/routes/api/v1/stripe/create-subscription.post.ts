@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody, createError } from 'h3';
 import { requireAuth } from '../../../../utils/require-auth';
-import { prisma } from '../../../../../lib/prisma';
+import { getPrisma } from '../../../../../lib/prisma';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
@@ -8,6 +8,7 @@ const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
 });
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const session = await requireAuth(event);
   const user = session.user;
   const priceId = process.env['STRIPE_PRICE_ID'];

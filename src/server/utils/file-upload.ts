@@ -9,6 +9,15 @@ export interface FileValidationOptions {
 
 const DEFAULT_MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
+async function isCloudflareWorkers(): Promise<boolean> {
+  try {
+    await import('cloudflare:workers');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 export function getPublicFilesDir(): string {
   return resolve(process.cwd(), 'public', 'files');
 }
@@ -51,44 +60,97 @@ export function validateFile(
   return { valid: true };
 }
 
+/**
+ * Save file to local filesystem (Node/Docker) or R2 (Cloudflare)
+ * Returns the public URL to access the file
+ */
 export async function saveFile(file: { data: Buffer; name: string }): Promise<string> {
   try {
     const filename = generateUniqueFilename(file.name);
-    const filesDir = getPublicFilesDir();
     
-    // Ensure the files directory exists
-    await fs.mkdir(filesDir, { recursive: true });
+    // Check if running in Cloudflare Workers
+    const isWorkers = await isCloudflareWorkers();
     
-    const filepath = resolve(filesDir, filename);
-    await fs.writeFile(filepath, file.data);
-    
-    return `/files/${filename}`;
+    if (isWorkers) {
+      // Use R2 for Cloudflare
+      const { env } = await import('cloudflare:workers');
+      const r2Bucket = (env as any).R2;
+      
+      if (!r2Bucket) {
+        throw new Error('R2 bucket not configured in Cloudflare environment');
+      }
+      
+      // Upload to R2
+      await r2Bucket.put(filename, file.data, {
+        httpMetadata: {
+          contentType: file.name.endsWith('.svg') ? 'image/svg+xml' : 'application/octet-stream',
+        },
+      });
+      
+      // Return the R2 public URL (adjust based on your R2 public URL configuration)
+      // For now, return a relative path that can be resolved to your R2 domain
+      return `/r2/${filename}`;
+    } else {
+      // Use local filesystem for Node/Docker
+      const filesDir = getPublicFilesDir();
+      
+      // Ensure the files directory exists
+      await fs.mkdir(filesDir, { recursive: true });
+      
+      const filepath = resolve(filesDir, filename);
+      await fs.writeFile(filepath, file.data);
+      
+      return `/files/${filename}`;
+    }
   } catch (error) {
     throw new Error(`Failed to save file: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
+/**
+ * Delete file from local filesystem (Node/Docker) or R2 (Cloudflare)
+ */
 export async function deleteFile(fileUrl: string | null): Promise<void> {
   if (!fileUrl || typeof fileUrl !== 'string') {
     return;
   }
 
   try {
-    // Only delete files from our /files/ directory
-    if (!fileUrl.startsWith('/files/')) {
-      return;
-    }
-
-    const filename = fileUrl.replace('/files/', '');
-    const filepath = resolve(getPublicFilesDir(), filename);
+    const isWorkers = await isCloudflareWorkers();
     
-    // Ensure the file is within the files directory (security check)
-    const filesDir = getPublicFilesDir();
-    if (!filepath.startsWith(filesDir)) {
-      throw new Error('Invalid file path');
-    }
+    if (isWorkers) {
+      // Delete from R2
+      if (!fileUrl.startsWith('/r2/')) {
+        return; // Only delete files from R2
+      }
+      
+      const { env } = await import('cloudflare:workers');
+      const r2Bucket = (env as any).R2;
+      
+      if (!r2Bucket) {
+        console.warn('R2 bucket not configured, cannot delete file');
+        return;
+      }
+      
+      const filename = fileUrl.replace('/r2/', '');
+      await r2Bucket.delete(filename);
+    } else {
+      // Delete from local filesystem
+      if (!fileUrl.startsWith('/files/')) {
+        return;
+      }
 
-    await fs.unlink(filepath);
+      const filename = fileUrl.replace('/files/', '');
+      const filepath = resolve(getPublicFilesDir(), filename);
+      
+      // Ensure the file is within the files directory (security check)
+      const filesDir = getPublicFilesDir();
+      if (!filepath.startsWith(filesDir)) {
+        throw new Error('Invalid file path');
+      }
+
+      await fs.unlink(filepath);
+    }
   } catch (error) {
     // Silently ignore if file doesn't exist or can't be deleted
     console.warn(`Could not delete file ${fileUrl}:`, error instanceof Error ? error.message : 'Unknown error');

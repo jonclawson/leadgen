@@ -1,6 +1,6 @@
 import { createError, EventHandler, H3Event } from "h3";
 import { fromNodeHeaders } from "better-auth/node";
-import { auth } from "./auth";
+import { getAuth } from "./auth";
 
 /**
  * Middleware used to require authentication for a route.
@@ -9,6 +9,7 @@ import { auth } from "./auth";
  */
 export const requireAuth: EventHandler = async (event: H3Event) => {
   const headers = event.headers;
+  const auth = await getAuth();
 
   const session = await auth.api.getSession({
     headers: headers,

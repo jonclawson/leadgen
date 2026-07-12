@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody, createError } from 'h3';
-import { prisma } from '../../../../lib/prisma';
+import { getPrisma } from '../../../../lib/prisma';
 
 interface SubmitFormRequest {
   formId: string;
@@ -8,6 +8,7 @@ interface SubmitFormRequest {
 }
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const body = await readBody<SubmitFormRequest>(event);
 
   if (!body.formId || !body.formId.trim()) {

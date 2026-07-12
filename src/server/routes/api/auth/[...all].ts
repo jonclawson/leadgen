@@ -1,6 +1,7 @@
 import { defineEventHandler, toWebRequest } from 'h3';
-import { auth } from '../../../utils/auth';
+import { getAuth } from '../../../utils/auth';
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
+  const auth = await getAuth();
   return auth.handler(toWebRequest(event));
 });

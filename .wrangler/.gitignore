@@ -1,0 +1,6 @@
+# Wrangler local development artifacts
+.wrangler/
+dist/
+*.db
+*.db-shm
+*.db-wal

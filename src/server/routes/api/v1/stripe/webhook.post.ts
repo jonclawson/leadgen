@@ -1,5 +1,5 @@
 import { defineEventHandler, readRawBody, createError } from 'h3';
-import { prisma } from '../../../../../lib/prisma';
+import { getPrisma } from '../../../../../lib/prisma';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
@@ -9,6 +9,7 @@ const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
 const webhookSecret = process.env['STRIPE_WEBHOOK_SECRET'];
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   if (!webhookSecret) {
     throw createError({
       statusCode: 500,

@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody, createError } from 'h3';
 import { requireAuth } from '../../../utils/require-auth';
-import { prisma } from '../../../../lib/prisma';
+import { getPrisma } from '../../../../lib/prisma';
 
 interface CreateArticleRequest {
   title: string;
@@ -20,6 +20,7 @@ function generateSlug(title: string): string {
 }
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const session = await requireAuth(event);
   const body = await readBody<CreateArticleRequest>(event);
 

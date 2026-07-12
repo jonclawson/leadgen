@@ -1,6 +1,6 @@
 import { defineEventHandler, getRouterParam, readBody, createError } from 'h3';
 import { requireAuth } from '../../../utils/require-auth';
-import { prisma } from '../../../../lib/prisma';
+import { getPrisma } from '../../../../lib/prisma';
 import { deleteFile } from '../../../utils/file-upload';
 
 interface UpdateArticleRequest {
@@ -12,6 +12,7 @@ interface UpdateArticleRequest {
 }
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const session = await requireAuth(event);
   const id = getRouterParam(event, 'id');
   const body = await readBody<UpdateArticleRequest>(event);

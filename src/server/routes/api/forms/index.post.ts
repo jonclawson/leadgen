@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody, createError } from 'h3';
 import { requireAuth } from '../../../utils/require-auth';
-import { prisma } from '../../../../lib/prisma';
+import { getPrisma } from '../../../../lib/prisma';
 
 interface CreateFormRequest {
   name: string;
@@ -20,6 +20,7 @@ interface CreateFormRequest {
 }
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
   const session = await requireAuth(event);
   const body = await readBody<CreateFormRequest>(event);
 

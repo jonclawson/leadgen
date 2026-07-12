@@ -26,11 +26,16 @@ export default defineConfig(({ mode }) => ({
         // },
         preset: 'node-server',
         routeRules: {
-          // All admin URLs are only rendered on the client
+          // Disable SSR for auth-dependent pages (client-only rendering)
+          '/': { ssr: false },
           '/index': { ssr: false },
           '/signup': { ssr: false },
-          '/forms': { ssr: false },
-          '/submissions': { ssr: false },
+          '/signin': { ssr: false },
+          '/signout': { ssr: false },
+          '/forms/**': { ssr: false },
+          '/submissions/**': { ssr: false },
+          '/articles/**': { ssr: false },
+          '/user/**': { ssr: false },
         },
       },
     }),

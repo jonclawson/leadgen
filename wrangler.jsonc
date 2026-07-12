@@ -1,0 +1,71 @@
+{
+  "name": "leadgen_analog_app",
+  // "type": "service",
+  // "main": "dist/server/index.mjs",
+  "compatibility_date": "2024-12-16",
+  
+  // Pages Functions configuration
+  "pages_build_output_dir": "dist/analog",
+  
+  // Environment-specific configuration
+  "env": {
+    // "development": {
+    //   "vars": {
+    //     "NODE_ENV": "development",
+    //     "ENVIRONMENT": "development",
+    //     "BETTER_AUTH_URL": "http://localhost:5173",
+    //     "VITE_AUTH_URL": "http://localhost:5173"
+    //   },
+    //   "d1_databases": [
+    //     {
+    //       "binding": "DB",
+    //       "database_name": "leadgen",
+    //       "preview_id": "leadgen-dev",
+    //       "migrations_dir": "prisma/migrations"
+    //     }
+    //   ],
+    //   "r2_buckets": [
+    //     {
+    //       "binding": "R2",
+    //       "bucket_name": "leadgen-dev",
+    //       "preview_bucket_name": "leadgen-dev"
+    //     }
+    //   ]
+    // },
+    "production": {
+      "vars": {
+        "NODE_ENV": "production",
+        "ENVIRONMENT": "production",
+        "BETTER_AUTH_URL": "https://leadgen.example.com",
+        "VITE_AUTH_URL": "https://leadgen.example.com"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "leadgen",
+          "migrations_dir": "prisma/migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "leadgen-prod"
+        }
+      ]
+    }
+  },
+
+  // Build configuration
+  // "build": {
+  //   "cwd": ".",
+  //   "command": "npm run build:cf"
+  // },
+
+  // // Routes configuration for Pages Functions
+  // "routes": [
+  //   {
+  //     "pattern": "^/api/.*",
+  //     "zone_name": "example.com"
+  //   }
+  // ]
+}

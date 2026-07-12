@@ -1,8 +1,10 @@
 import { defineEventHandler, readBody, createError } from 'h3';
-import { prisma } from '../../../../lib/prisma';
-import { auth } from '../../../utils/auth';
+import { getPrisma } from '../../../../lib/prisma';
+import { getAuth } from '../../../utils/auth';
 
 export default defineEventHandler(async (event) => {
+  const prisma = await getPrisma();
+  const auth = await getAuth();
   const session = await auth.api.getSession({
     headers: event.headers,
   });
