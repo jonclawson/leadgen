@@ -42,6 +42,9 @@ export default defineConfig(({ mode }) => ({
         env: {
           autoAlias: true,
         },
+        alias: {
+          'better-auth': 'better-auth/dist/index.js'
+        }
       },
     }),
     tailwindcss()

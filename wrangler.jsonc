@@ -3,7 +3,9 @@
   // "type": "service",
   // "main": "dist/server/index.mjs",
   "compatibility_date": "2024-12-16",
-  
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   // Pages Functions configuration
   "pages_build_output_dir": "dist/analog/public",
   

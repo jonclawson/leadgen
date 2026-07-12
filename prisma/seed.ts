@@ -1,8 +1,9 @@
-import { auth } from "src/server/utils/auth";
-import { prisma } from "../src/lib/prisma";
+import { getAuth } from "src/server/utils/auth";
+import { getPrisma } from "../src/lib/prisma";
 
 
 async function main() {
+  const auth = await getAuth();
   const result = await auth.api.signUpEmail({
     body: {
       email: "admin@example.com",
@@ -12,7 +13,7 @@ async function main() {
   });
 
   console.log("Admin seeded successfully:", result.user.email);
-
+  const prisma = await getPrisma();
   const message = await prisma.message.create({
     data: {
       body: 'Hello, world!',
@@ -25,10 +26,10 @@ async function main() {
 
 main()
   .then(async () => {
-    await prisma.$disconnect();
+    await getPrisma().then(prisma => prisma.$disconnect());
   })
   .catch(async (e) => {
     console.error(e);
-    await prisma.$disconnect();
+    await getPrisma().then(prisma => prisma.$disconnect());
     process.exit(1);
   });
