@@ -1,2 +1,0 @@
-import{d as e,g as r,c as s}from"../../../nitro/nitro.mjs";import{g as t}from"../../../_/prisma.mjs";import"../../../_/url.mjs";import"../../../_/performance.mjs";const i=e(async e=>{const i=await t(),a=r(e,"id");if(!a)throw s({statusCode:400,message:"Article ID is required"});const o=await i.article.findUnique({where:{id:a},include:{user:{select:{id:!0,name:!0,email:!0}},form:{select:{id:!0,name:!0,fields:{orderBy:{order:"asc"}}}}}});if(!o)throw s({statusCode:404,message:"Article not found"});return{article:o}});export{i as default};
-//# sourceMappingURL=_id_.get.mjs.map

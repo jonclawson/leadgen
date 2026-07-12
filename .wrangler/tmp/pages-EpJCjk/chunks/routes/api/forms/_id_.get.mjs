@@ -1,2 +1,0 @@
-import{d as r,g as o,c as s}from"../../../nitro/nitro.mjs";import{g as t}from"../../../_/prisma.mjs";import"../../../_/url.mjs";import"../../../_/performance.mjs";const e=r(async r=>{const e=await t(),i=o(r,"id");if(!i)throw s({statusCode:400,message:"Form ID is required"});const a=await e.dynamicForm.findUnique({where:{id:i},include:{fields:{orderBy:{order:"asc"}}}});if(!a)throw s({statusCode:404,message:"Form not found"});return{form:a}});export{e as default};
-//# sourceMappingURL=_id_.get.mjs.map

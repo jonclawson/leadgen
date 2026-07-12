@@ -1,3 +1,5 @@
+if (typeof globalThis !== 'undefined') (globalThis as any).ngDevMode = false;
+
 import '@angular/platform-server/init';
 import { render } from '@analogjs/router/server';
 

@@ -1,11 +1,11 @@
 {
-  "name": "leadgen_analog_app",
+  "name": "leadgen",
   // "type": "service",
   // "main": "dist/server/index.mjs",
   "compatibility_date": "2024-12-16",
   
   // Pages Functions configuration
-  "pages_build_output_dir": "dist/analog",
+  "pages_build_output_dir": "dist/analog/public",
   
   // Environment-specific configuration
   "env": {
@@ -36,14 +36,15 @@
       "vars": {
         "NODE_ENV": "production",
         "ENVIRONMENT": "production",
-        "BETTER_AUTH_URL": "https://leadgen.example.com",
-        "VITE_AUTH_URL": "https://leadgen.example.com"
+        "BETTER_AUTH_URL": "https://leadgen-dw3.pages.dev",
+        "VITE_AUTH_URL": "https://leadgen-dw3.pages.dev"
       },
       "d1_databases": [
         {
           "binding": "DB",
+          "database_id": "ed5a4bbb-1de8-42d3-9501-b86ce0fd4abd",
           "database_name": "leadgen",
-          "migrations_dir": "prisma/migrations"
+          "migrations_dir": "./migrations"
         }
       ],
       "r2_buckets": [

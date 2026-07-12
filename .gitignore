@@ -52,3 +52,4 @@ dev.db
 
 public/files
 
+.wrangler/

@@ -46,6 +46,9 @@ export default defineConfig(({ mode }) => ({
     }),
     tailwindcss()
   ],
+  define: {
+    'ngDevMode': 'false',
+  },
   test: {
     globals: true,
     environment: 'jsdom',

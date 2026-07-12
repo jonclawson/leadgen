@@ -1,2 +1,0 @@
-const load=async({params:l,fetch:o})=>{console.log("Loading article with slug:",null==l?void 0:l.slug);const r=null==l?void 0:l.slug;try{const l=await o(`/api/articles/slug/${r}`);if(console.log("API response received:",null==l?void 0:l.article),!(null==l?void 0:l.article))throw new Error("Article not found");console.log("Article data loaded successfully");return l}catch(l){return console.error("Error loading article:",l),{article:null,error:!0}}};export{load};
-//# sourceMappingURL=_slug_.server-UTu3zH4s.mjs.map

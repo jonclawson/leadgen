@@ -1,2 +1,0 @@
-import{d as o,u as s}from"../../../nitro/nitro.mjs";import{g as r}from"../../../_/prisma.mjs";import"../../../_/url.mjs";import"../../../_/performance.mjs";const t=o(async()=>{const o=await r();console.log("Hello from the API route!",s.env.DATABASE_URL);const t=await o.message.findFirst();return{message:(null==t?void 0:t.body)||"No message found"}});export{t as default};
-//# sourceMappingURL=hello.mjs.map
