@@ -11,16 +11,16 @@
     "start": "npm run dev",
     "build": "vite build",
     "build:cf": "NODE_ENV=production && vite build -c vite.cloudflare.config.ts",
-    "dev:cf": "wrangler pages dev dist/analog",
+    "build:cf:dev": "NODE_ENV=development && vite build -c vite.cloudflare.config.ts",
+    "dev:cf": "wrangler pages dev dist/analog --port 5173 --ip 0.0.0.0",
     "watch": "vite build --watch",
     "test": "vitest",
     "preview": "node -r dotenv/config dist/analog/server/index.mjs",
     "seed": "tsx prisma/seed.ts",
     "deploy:cf": "npm run build:cf && wrangler pages deploy",
     "db:migrate:create": "node scripts/migrate.js",
-    "db:migrate:local": "wrangler d1 migrations apply leadgen --local --env production",
-    "db:migrate:deploy": "wrangler d1 migrations apply leadgen --remote --env production",
-    "migrate:cf": "npx wrangler d1 migrations apply leadgen --remote --env production "
+    "db:migrate:local": "wrangler d1 migrations apply leadgen --local --env devel",
+    "db:migrate:deploy": "wrangler d1 migrations apply leadgen --remote --env production"
   },
   "private": true,
   "dependencies": {

@@ -22,6 +22,9 @@ export default defineConfig(({ mode }) => ({
       nitro: {
         // Use Cloudflare Pages preset for Workers/Pages Functions
         preset: 'cloudflare_pages',
+        experimental: {
+          wasm: true,
+        },
         output: {
           dir: './dist/analog/public',
           serverDir: './dist/analog/public/_worker.js',
@@ -42,9 +45,6 @@ export default defineConfig(({ mode }) => ({
         env: {
           autoAlias: true,
         },
-        alias: {
-          'better-auth': 'better-auth/dist/index.js'
-        }
       },
     }),
     tailwindcss()

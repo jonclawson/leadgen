@@ -8,7 +8,28 @@
   ],
   // Pages Functions configuration
   "pages_build_output_dir": "dist/analog/public",
-  
+  //  "vars": {
+  //   "NODE_ENV": "development",
+  //   "ENVIRONMENT": "development",
+  //   "BETTER_AUTH_URL": "http://localhost:5173",
+  //   "VITE_AUTH_URL": "http://localhost:5173",
+  //   "NITRO_PORT": "5173"
+  // },
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "leadgen",
+  //     "preview_id": "leadgen-dev",
+  //     "migrations_dir": "./migrations"
+  //   }
+  // ],
+  // "r2_buckets": [
+  //   {
+  //     "binding": "R2",
+  //     "bucket_name": "leadgen-dev",
+  //     "preview_bucket_name": "leadgen-dev"
+  //   }
+  // ],
   // Environment-specific configuration
   "env": {
     // "development": {
@@ -16,14 +37,15 @@
     //     "NODE_ENV": "development",
     //     "ENVIRONMENT": "development",
     //     "BETTER_AUTH_URL": "http://localhost:5173",
-    //     "VITE_AUTH_URL": "http://localhost:5173"
+    //     "VITE_AUTH_URL": "http://localhost:5173",
+    //     "NITRO_PORT": "5173"
     //   },
     //   "d1_databases": [
     //     {
     //       "binding": "DB",
     //       "database_name": "leadgen",
     //       "preview_id": "leadgen-dev",
-    //       "migrations_dir": "prisma/migrations"
+    //       "migrations_dir": "./migrations"
     //     }
     //   ],
     //   "r2_buckets": [
