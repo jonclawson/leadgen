@@ -17,7 +17,7 @@
     "test": "vitest",
     "preview": "node -r dotenv/config dist/analog/server/index.mjs",
     "seed": "tsx prisma/seed.ts",
-    "deploy:cf": "npm run build:cf && wrangler pages deploy",
+    "deploy:cf": "wrangler pages deploy",
     "db:migrate:create": "node scripts/migrate.js",
     "db:migrate:local": "wrangler d1 migrations apply leadgen --local --env devel",
     "db:migrate:deploy": "wrangler d1 migrations apply leadgen --remote --env production"
