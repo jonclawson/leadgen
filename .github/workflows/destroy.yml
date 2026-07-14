@@ -38,7 +38,7 @@ jobs:
         working-directory: ./
         run: |
           echo "Deleting D1 Database..."
-          npx wrangler d1 delete leadgen --skip-confirmation
+          npx wrangler d1 delete ${{ secrets.PAGES_PROJECT_NAME }} --skip-confirmation
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
@@ -47,8 +47,8 @@ jobs:
         working-directory: ./
         run: |
           echo "Deleting R2 Production Bucket..."
-          npx wrangler r2 bucket lifecycle add leadgen-prod --name expire --prefix "" --expire-days 0 --env production --y
-          npx wrangler r2 bucket delete leadgen-prod
+          npx wrangler r2 bucket lifecycle add ${{ secrets.PAGES_PROJECT_NAME }} --name expire --prefix "" --expire-days 0 --env production --y
+          npx wrangler r2 bucket delete ${{ secrets.PAGES_PROJECT_NAME }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
@@ -57,7 +57,7 @@ jobs:
         working-directory: ./
         run: |
           echo "Deleting Pages Project..."
-          npx wrangler pages project delete leadgen --y
+          npx wrangler pages project delete ${{ secrets.PAGES_PROJECT_NAME }} --y
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
