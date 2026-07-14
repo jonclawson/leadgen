@@ -93,7 +93,7 @@ export default defineEventHandler(async (event) => {
       setResponseHeader(event, 'Content-Type', mimeType);
       setResponseHeader(event, 'Cache-Control', 'public, max-age=31536000, immutable');
 
-      return object.stream();
+      return object.body;
     } else {
       // Node.js/Docker: retrieve from local filesystem
       const filesDir = getPublicFilesDir();
