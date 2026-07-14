@@ -112,7 +112,6 @@ jobs:
           '
           
           # Run database migrations and deploy application
-          npm run db:migrate:create
           npm run db:migrate:deploy
           npm run deploy:cf -- --project-name=${{ env.PAGES_PROJECT_NAME }}
         env:
