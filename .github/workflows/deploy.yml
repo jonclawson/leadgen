@@ -82,6 +82,34 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      - name: Ensure Pages Project Exists
+        working-directory: ./
+        run: |
+          echo "Checking for existing Pages project named '${{ secrets.PAGES_PROJECT_NAME }}'..."
+          
+          # 1. List all pages projects in JSON format
+          PROJECT_LIST=$(npx wrangler pages project list --json)
+          
+          # 2. Check if the project name from secrets already exists
+          EXISTS=$(echo "$PROJECT_LIST" | TARGET_NAME="${{ secrets.PAGES_PROJECT_NAME }}" node -e '
+            const fs = require("fs");
+            const projects = JSON.parse(fs.readFileSync(0, "utf-8"));
+            const target = process.env.TARGET_NAME;
+            const found = projects.some(p => p.name === target);
+            console.log(found ? "true" : "false");
+          ')
+          
+          # 3. Create the project only if it is missing
+          if [ "$EXISTS" = "false" ]; then
+            echo "Pages project '${{ secrets.PAGES_PROJECT_NAME }}' not found. Creating it now..."
+            npx wrangler pages project create "${{ secrets.PAGES_PROJECT_NAME }}" --production-branch=main
+          else
+            echo "Pages project '${{ secrets.PAGES_PROJECT_NAME }}' already exists. Skipping creation."
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name:  Deploy
         working-directory: ./
         run: |

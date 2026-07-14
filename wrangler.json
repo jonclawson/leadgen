@@ -37,7 +37,7 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_id": "ed5a4bbb-1de8-42d3-9501-b86ce0fd4abd",
+          "database_id": "f8abbb39-54eb-44b0-9a8b-c3bf926151a7",
           "database_name": "leadgen",
           "migrations_dir": "./migrations"
         }
