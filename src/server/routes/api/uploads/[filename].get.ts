@@ -1,7 +1,7 @@
 import { defineEventHandler, getRouterParam, createError, setResponseHeader } from 'h3';
 import { promises as fs } from 'fs';
 import { resolve, extname } from 'path';
-import { getPublicFilesDir } from '../../utils/file-upload';
+import { getPublicFilesDir } from '../../../utils/file-upload';
 
 /**
  * Get MIME type from file extension
