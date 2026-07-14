@@ -26,6 +26,8 @@ export default defineConfig(({ mode }) => ({
         // },
         preset: 'node-server',
         routeRules: {
+          // Redirect R2 file requests to API endpoint for centralized serving
+          '/r2/**': { redirect: '/api/uploads/**' },
           // Disable SSR for auth-dependent pages (client-only rendering)
           '/': { ssr: false },
           '/index': { ssr: false },

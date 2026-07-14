@@ -30,6 +30,8 @@ export default defineConfig(({ mode }) => ({
           serverDir: './dist/analog/public/_worker.js',
         },
         routeRules: {
+          // Redirect R2 file requests to API endpoint for centralized serving
+          '/r2/**': { redirect: '/api/uploads/**' },
           // All admin URLs are only rendered on the client
           '/': { ssr: false },
           '/index': { ssr: false },

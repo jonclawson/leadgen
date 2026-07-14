@@ -1,6 +1,6 @@
-import { defineEventHandler } from 'h3';
+import { defineEventHandler, getRequestURL } from 'h3';
 
 export default defineEventHandler((event) => {
-  const url = event.node.req.url || '';
-  console.log('Received request for URL:', url);
+  const url = getRequestURL(event) || '';
+  console.log('Received request for URL:', url.href);
 });
