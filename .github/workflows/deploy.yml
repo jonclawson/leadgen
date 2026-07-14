@@ -18,6 +18,13 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Assert Pages Project Name Secret is Set
+        run: |
+          if [ -z "${{ secrets.PAGES_PROJECT_NAME }}" ]; then
+            echo "::error::The PAGES_PROJECT_NAME GitHub secret is missing or empty. Please configure it in your repository settings."
+            exit 1
+          fi
+
       - name: Install dependencies
         working-directory: ./
         run: npm ci
