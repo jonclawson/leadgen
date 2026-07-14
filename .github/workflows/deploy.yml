@@ -82,13 +82,13 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Configure wrangler.jsonc and Deploy
+      - name:  Deploy
         working-directory: ./
         run: |
-          # Parse and overwrite wrangler.jsonc using an inline Node script
+          # Parse and overwrite wrangler.json using an inline Node script
           node -e '
             const fs = require("fs");
-            const file = "wrangler.jsonc";
+            const file = "wrangler.json";
             const rawData = fs.readFileSync(file, "utf8");
             
             // Strip comments to safely parse JSONC
@@ -108,7 +108,7 @@ jobs:
             
             // Write back standard clean JSON
             fs.writeFileSync(file, JSON.stringify(config, null, 2), "utf8");
-            console.log("wrangler.jsonc successfully updated.");
+            console.log("wrangler.json successfully updated.");
           '
           
           # Run database migrations and deploy application
