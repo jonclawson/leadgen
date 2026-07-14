@@ -4,10 +4,8 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
-  runtime  = "cloudflare"
-  
+  // runtime  = "cloudflare"
 }
-  // previewFeatures = ["driverAdapters"]
 
 datasource db {
   provider = "sqlite"

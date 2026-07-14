@@ -1,0 +1,127 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: ./
+        run: npm ci
+
+      # - name: Lint
+        # working-directory: ./
+        # run: npm run lint
+
+      # - name: Test
+      #   working-directory: ./
+      #   run: npm run test
+
+      - name: Configure Prisma for Cloudflare
+        run: |
+          sed -i 's/\/\/ runtime  = "cloudflare"/runtime  = "cloudflare"/' prisma/schema.prisma
+
+      - name: Build
+        working-directory: ./
+        run: npm run build:cf
+        env:
+          VITE_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+
+      - name: Create D1 Database
+        id: cloudflare_db
+        working-directory: ./
+        run: |
+          DB_LIST=$(npx wrangler d1 list --json)
+          
+          DB_ID=$(echo "$DB_LIST" | node -e '
+            const fs = require("fs");
+            const databases = JSON.parse(fs.readFileSync(0, "utf-8"));
+            
+            const existing = databases.find(db => db.name === "leadgen");
+            
+            if (existing) {
+              console.log(existing.uuid);
+            } else {
+              console.log("");
+            }
+          ')
+
+          if [ -z "$DB_ID" ]; then
+            CREATE_OUTPUT=$(npx wrangler d1 create leadgen --env production)
+            echo "$CREATE_OUTPUT"
+            
+            DB_ID=$(echo "$CREATE_OUTPUT" | grep -oE '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}' | head -n 1)
+          else
+            echo "Found existing database."
+          fi
+
+          if [ -z "$DB_ID" ]; then
+            echo "Error: Failed to resolve a database_id."
+            exit 1
+          fi
+          
+          echo "Successfully created database with ID: $DB_ID"
+          
+          echo "DB_ID=$DB_ID" >> $GITHUB_ENV
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Configure wrangler.jsonc and Deploy
+        working-directory: ./
+        run: |
+          # Parse and overwrite wrangler.jsonc using an inline Node script
+          node -e '
+            const fs = require("fs");
+            const file = "wrangler.jsonc";
+            const rawData = fs.readFileSync(file, "utf8");
+            
+            // Strip comments to safely parse JSONC
+            // const cleanJson = rawData.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "$1");
+            // Using JSON
+            const config = JSON.parse(rawData);
+            
+            // Inject the new Database ID from the step environment
+            config.env.production.d1_databases[0].database_id = process.env.DB_ID;
+            
+            // Inject the missing production secrets/vars
+            config.env.production.vars.BETTER_AUTH_SECRET = process.env.BETTER_AUTH_SECRET;
+            config.env.production.vars.BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
+            config.env.production.vars.STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+            config.env.production.vars.STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID;
+            config.env.production.vars.STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+            
+            // Write back standard clean JSON
+            fs.writeFileSync(file, JSON.stringify(config, null, 2), "utf8");
+            console.log("wrangler.jsonc successfully updated.");
+          '
+          
+          # Run database migrations and deploy application
+          npm run db:migrate:create
+          npm run db:migrate:deploy
+          npm run deploy:cf
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          DB_ID: ${{ env.DB_ID }} 
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_PRICE_ID: ${{ secrets.STRIPE_PRICE_ID }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+
+

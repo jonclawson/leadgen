@@ -1,0 +1,53 @@
+{
+  "name": "leadgen",
+  "compatibility_date": "2024-12-16",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "pages_build_output_dir": "dist/analog/public",
+   "vars": {
+    "NODE_ENV": "development",
+    "ENVIRONMENT": "development",
+    "BETTER_AUTH_URL": "http://localhost:5173",
+    "VITE_AUTH_URL": "http://localhost:5173",
+    "NITRO_PORT": "5173"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "leadgen",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "leadgen-dev",
+      "preview_bucket_name": "leadgen-dev"
+    }
+  ],
+  "env": {
+    "production": {
+      "vars": {
+        "NODE_ENV": "production",
+        "ENVIRONMENT": "production",
+        "BETTER_AUTH_URL": "https://leadgen-dw3.pages.dev",
+        "VITE_AUTH_URL": "https://leadgen-dw3.pages.dev"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "ed5a4bbb-1de8-42d3-9501-b86ce0fd4abd",
+          "database_name": "leadgen",
+          "migrations_dir": "./migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "leadgen-prod"
+        }
+      ]
+    }
+  }
+}
