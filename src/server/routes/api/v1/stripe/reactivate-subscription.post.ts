@@ -3,7 +3,9 @@ import { requireAuth } from '../../../../utils/require-auth';
 import { getPrisma } from '../../../../../lib/prisma';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
+const env = process.env || (globalThis as any)?.__env__;
+
+const stripe = new Stripe(env['STRIPE_SECRET_KEY'] || '', {
   apiVersion: '2025-01-27.acacia',
 });
 

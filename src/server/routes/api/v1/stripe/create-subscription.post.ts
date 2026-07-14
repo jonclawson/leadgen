@@ -3,7 +3,9 @@ import { requireAuth } from '../../../../utils/require-auth';
 import { getPrisma } from '../../../../../lib/prisma';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || '', {
+const env = process.env || (globalThis as any)?.__env__;
+
+const stripe = new Stripe(env['STRIPE_SECRET_KEY'] || '', {
   apiVersion: '2025-01-27.acacia', // Best practice: use a specific API version
 });
 
@@ -11,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const prisma = await getPrisma();
   const session = await requireAuth(event);
   const user = session.user;
-  const priceId = process.env['STRIPE_PRICE_ID'];
+  const priceId = env['STRIPE_PRICE_ID'];
 
   if (!priceId) {
     throw createError({
