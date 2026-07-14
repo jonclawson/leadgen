@@ -91,25 +91,13 @@ jobs:
         run: |
           echo "Checking for existing R2 bucket..."
           
-          # 1. List all active R2 buckets in JSON format
-          BUCKET_LIST=$(npx wrangler r2 bucket list --json)
-          
-          # 2. Check if a bucket matching your naming convention exists
-          # (Assuming you use a convention like: leadgen-prod)
-          EXISTS=$(echo "$BUCKET_LIST" | TARGET_BUCKET="${{ secrets.PAGES_PROJECT_NAME }}-prod" node -e '
-            const fs = require("fs");
-            const buckets = JSON.parse(fs.readFileSync(0, "utf-8"));
-            const target = process.env.TARGET_BUCKET;
-            const found = buckets.some(b => b.name === target);
-            console.log(found ? "true" : "false");
-          ')
-          
-          # 3. Create the bucket only if it is missing
-          if [ "$EXISTS" = "false" ]; then
-            echo "R2 Bucket '${{ secrets.PAGES_PROJECT_NAME }}-prod' not found. Creating it now..."
-            npx wrangler r2 bucket create "${{ secrets.PAGES_PROJECT_NAME }}-prod"
+          # 1. Run the standard list command and search for your specific bucket name
+          # Using -F makes grep treat the string as a literal match, and -q makes it quiet/silent.
+          if npx wrangler r2 bucket list | grep -Fq "${{ secrets.PAGES_PROJECT_NAME }}"; then
+            echo "R2 Bucket '${{ secrets.PAGES_PROJECT_NAME }}' already exists. Skipping creation."
           else
-            echo "R2 Bucket '${{ secrets.PAGES_PROJECT_NAME }}-prod' already exists. Skipping creation."
+            echo "R2 Bucket '${{ secrets.PAGES_PROJECT_NAME }}' not found. Creating it now..."
+            npx wrangler r2 bucket create "${{ secrets.PAGES_PROJECT_NAME }}"
           fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
