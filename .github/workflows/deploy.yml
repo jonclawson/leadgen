@@ -33,6 +33,7 @@ jobs:
       - name: Configure Prisma for Cloudflare
         run: |
           sed -i 's/\/\/ runtime  = "cloudflare"/runtime  = "cloudflare"/' prisma/schema.prisma
+          npx prisma generate
 
       - name: Build
         working-directory: ./
